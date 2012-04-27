@@ -1,0 +1,44 @@
+.txtBox {
+	border: dashed 0.1em;
+	font-size: small;
+	position: absolute;
+	text-align: left;
+	z-index: 31;
+	opacity: 0.1;
+}
+
+.HUDButton {
+	width: 15px;
+	height: 15px;
+	position: fixed;
+	z-index: 30;
+	font-size: small;
+	text-align: center;
+	opacity: 0.8;
+}
+
+.slider {
+	position: absolute;
+	opacity: 0.0;
+	width: 10px;
+	height: 10px;
+	z-index: 32;
+}
+
+.leftButton {
+	left: 0px;
+	bottom: 0px;
+	background-color: blue;
+}
+
+.rightButton {
+	right: 0px;
+	bottom: 0px;
+	background-color: red;
+}
+
+.alertButton {
+	right: 15px;
+	bottom: 0px;
+	background-color: yellow;
+}

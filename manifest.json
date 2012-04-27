@@ -1,0 +1,21 @@
+{
+  "name": "¡synthesis!",
+  "version": "0.1",
+  "description": "makes marks",
+  "browser_action": {
+    "default_icon": "images/icon2.png"
+  },
+  "icons":{
+    "128":"images/icon.png"
+  },
+  "content_security_policy": "unsafe-eval",
+  "content_scripts": [ {
+      "matches": ["http://*/*"],
+      "js": ["scripts/underscore.js", "scripts/backbone.js", "scripts/jquery.min.js", "scripts/jquery.couch.js", "inject/links.js"],
+      "css": ["css/mainstyle.css"]
+  } ],
+  "background_page":"background.html",
+  "permissions": [
+  	"tabs", "http://*/*", "https://*/*" 
+  ]
+}
