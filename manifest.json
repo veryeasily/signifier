@@ -1,7 +1,7 @@
 {
-  "name": "¡synthesis!",
+  "name": "Signifier",
   "version": "0.1",
-  "description": "makes marks",
+  "description": "Yo dawg, I heard you like the internet so we...",
   "browser_action": {
     "default_icon": "images/icon2.png"
   },
