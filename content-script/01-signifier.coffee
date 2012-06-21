@@ -6,6 +6,9 @@ class Signifier
 	## I can't remember why I made this
 	@loc: window.location
 
+	@deleteEntireDatabase: =>
+		@socket.emit 'deleteTheWholeShebang'
+
 	@socket: io.connect('http://www.sgnfier.com:7000')
 
 	@findTextNode: (str, node) ->
@@ -22,6 +25,7 @@ class Signifier
 			host: @loc.hostname,
 			path: @loc.pathname
 		@socket.on 'heresYourHood', (links) ->
+			console.log "why can't we get this far!?"
 			if logging
 				console.log "response from heresYourHood!"
 				console.log links

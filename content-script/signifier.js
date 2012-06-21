@@ -8,6 +8,10 @@ Signifier = (function() {
 
   Signifier.loc = window.location;
 
+  Signifier.deleteEntireDatabase = function() {
+    return Signifier.socket.emit('deleteTheWholeShebang');
+  };
+
   Signifier.socket = io.connect('http://www.sgnfier.com:7000');
 
   Signifier.findTextNode = function(str, node) {
@@ -34,6 +38,7 @@ Signifier = (function() {
     });
     return this.socket.on('heresYourHood', function(links) {
       var observer;
+      console.log("why can't we get this far!?");
       if (logging) {
         console.log("response from heresYourHood!");
         console.log(links);
@@ -162,7 +167,7 @@ Signifier = (function() {
 
   return Signifier;
 
-})();
+}).call(this);
 
 Sign = (function() {
 
