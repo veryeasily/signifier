@@ -1,0 +1,24 @@
+{
+  "name": "Signifier",
+  "version": "0.1005",
+  "description": "Yo dawg, I heard you like the internet so we...",
+  "browser_action": {
+    "default_icon": "images/icon2.png",
+	"default_popup": "chrome/popup.html"
+  },
+  "background": {
+    "page": "chrome/background.html"
+  },
+  "icons":{
+    "128":"images/icon.png"
+  },
+  "content_security_policy": "unsafe-eval",
+  "content_scripts": [ {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["scripts/socket.io.js", "scripts/underscore.js", "scripts/jquery.min.js", "content-script/signifier.js"],
+	  "css": ["css/mainstyle.css"]
+  }  ],
+  "permissions": [
+  	"tabs", "http://127.0.0.1:7000/*", "https://127.0.0.1:7000/*"
+  ]
+}
