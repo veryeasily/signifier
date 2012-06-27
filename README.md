@@ -1,12 +1,12 @@
 <link rel="stylesheet" type="text/css" href="https://raw.github.com/silenter/signifier/master/css/github.css" />
 
-<table class="sigTable" style="border:hidden transparent 0px;" cellpadding="0" cellspacing="0" frame="void" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" frame="void" width="100%">
 <colgroup>
-<col class="one">
-<col class="two" align="right">
+<col class="one" border="0">
+<col class="two" border="0" align="right">
 </colgroup>
 <tr>
-<th rowspan="7">
+<th rowspan="9">
 <h1>signifier</h1>
 
 <p>Hyperlink markup for the web - 
@@ -51,14 +51,10 @@ or maybe
 </tr>
 <tr>
 <td>
-</td>
-<td>
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="84px" height="64px" align="right">
 </td>
 </tr>
 <tr>
-<td>
-</td>
 <td>
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="84px" height="64px" align="right">
 </td>
