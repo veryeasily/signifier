@@ -1,5 +1,17 @@
 var makeIt, removeIt;
 
+$("#signer").css({
+  "background-color": "red",
+  top: "5px",
+  left: "5px"
+});
+
+$("#signer2").css({
+  "background-color": "blue",
+  top: "100px",
+  left: "100px"
+});
+
 makeIt = function(e) {
   return chrome.extension.sendRequest({
     greeting: "makeSign"
@@ -16,6 +28,6 @@ removeIt = function(e) {
   });
 };
 
-document.getElementById("signer").addEventListener("click", makeIt);
+$("#signer").on("click", makeIt);
 
-document.getElementById("signer2").addEventListener("click", removeIt);
+$("#signer2").on("click", removeIt);

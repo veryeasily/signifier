@@ -1,15 +1,16 @@
+#
+# IMPORTANT THERE IS ALREADY A METHOD CALLED DELETER IN THE THIRD TAB!!!
+# IMPORTANT THERE IS ALREADY A METHOD CALLED DELETER IN THE THIRD TAB!!!
 # logging boolean to turn on and off logging garbage
+#
 logging = true
 
 class Signifier
-
 	## I can't remember why I made this
 	@loc: window.location
 
 	@deleteEntireDatabase: =>
 		@socket.emit 'deleteTheWholeShebang'
-
-	@socket: io.connect('http://www.sgnfier.com:7000')
 
 	@findTextNode: (str, node) ->
 		for child in node.childNodes when (child.textContent || "").indexOf(str) > -1
@@ -25,7 +26,6 @@ class Signifier
 			host: @loc.hostname,
 			path: @loc.pathname
 		@socket.on 'heresYourHood', (links) ->
-			console.log "why can't we get this far!?"
 			if logging
 				console.log "response from heresYourHood!"
 				console.log links
@@ -104,5 +104,9 @@ class Signifier
 
 
 	@activate: ->
-		@socket.on 'whereYat', ->
+		console.log 'made it to Signifier.activate()!' if logging
+		Signifier.socket = io.connect "http://www.sgnfier.com:7000"
+		Sign.socket = Signifier.socket
+		Signifier.socket.on 'whereYat', (data) ->
+			console.log "whereYat recieved!" if logging
 			Signifier.getNeighborhood()

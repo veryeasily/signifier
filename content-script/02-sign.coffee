@@ -24,8 +24,6 @@ class Sign
 			console.log "offset being returned from @getOffsetToNode is: #{offset}"
 			return offset
 
-	@socket: Signifier.socket
-
 	@getMargin: (range) =>
 		console.log "range is ="
 		console.log range

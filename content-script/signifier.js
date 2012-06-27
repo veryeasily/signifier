@@ -12,8 +12,6 @@ Signifier = (function() {
     return Signifier.socket.emit('deleteTheWholeShebang');
   };
 
-  Signifier.socket = io.connect('http://www.sgnfier.com:7000');
-
   Signifier.findTextNode = function(str, node) {
     var child, _i, _len, _ref;
     _ref = node.childNodes;
@@ -38,7 +36,6 @@ Signifier = (function() {
     });
     return this.socket.on('heresYourHood', function(links) {
       var observer;
-      console.log("why can't we get this far!?");
       if (logging) {
         console.log("response from heresYourHood!");
         console.log(links);
@@ -160,7 +157,11 @@ Signifier = (function() {
   };
 
   Signifier.activate = function() {
-    return this.socket.on('whereYat', function() {
+    if (logging) console.log('made it to Signifier.activate()!');
+    Signifier.socket = io.connect("http://www.sgnfier.com:7000");
+    Sign.socket = Signifier.socket;
+    return Signifier.socket.on('whereYat', function(data) {
+      if (logging) console.log("whereYat recieved!");
       return Signifier.getNeighborhood();
     });
   };
@@ -217,8 +218,6 @@ Sign = (function() {
       return offset;
     }
   };
-
-  Sign.socket = Signifier.socket;
 
   Sign.getMargin = function(range) {
     var endOffset, left, right, send, startOffset;
@@ -355,7 +354,7 @@ Deleter = (function() {
 $(function() {
   Signifier.activate();
   Sign.activate();
-  return console.log("Signifier activated");
+  if (logging) return console.log("Signifier activated");
 });
 
 SigHelpers = (function() {

@@ -1,4 +1,4 @@
 $ ->
 	Signifier.activate()
 	Sign.activate()
-	return console.log "Signifier activated"
+	return console.log "Signifier activated" if logging
