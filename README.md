@@ -14,47 +14,47 @@ or maybe
 </p>
 </th>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80px" height="64px" align="right">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="86px" height="64px" align="right">
 </td>
 </tr>
 </table>
