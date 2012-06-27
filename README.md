@@ -1,13 +1,19 @@
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
+<br />
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
 <br />
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
+<br />
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
 <br />
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
+<br />
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
+<br />
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
+<br />
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
+<br />
 <img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="64px" height="64px" align="right">
 signifier
 =========
