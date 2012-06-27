@@ -1,4 +1,6 @@
-<table style="border:hidden transparent 0px;" cellpadding="0" cellspacing="0" frame="void" width="100%">
+<link rel="stylesheet" type="text/css" href="https://raw.github.com/silenter/signifier/master/css/github.css" />
+
+<table class="sigTable" style="border:hidden transparent 0px;" cellpadding="0" cellspacing="0" frame="void" width="100%">
 <colgroup>
 <col class="one">
 <col class="two" align="right">
