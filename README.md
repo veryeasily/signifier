@@ -1,7 +1,4 @@
-
-<style type="text/css">
-table {border: 0px hidden transparent;}
-</style>
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <colgroup>
