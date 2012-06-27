@@ -1,27 +1,74 @@
+
+@import 'mixins'
+
+wdth = 40px
+hght = 32px
+spaceBetween = 2.75px
+lMarg = 3.25px
+hMarg = 2px
+borderWidth = 1px
+
 html 
-	width: 85px;
-	overflow-x: hidden;
-	background-color: #333333;
-	height: 167px;
+	background-color: white
+	height: unit(((2 * hMarg) + hght + (2 * borderWidth)), px)
+	width: unit(((2 * (lMarg + wdth)) + spaceBetween + (4 * borderWidth)), px)
 
+.sigButton 
+	font-size: small
+	font-family: 'Port Lligat Sans', sans-serif
+	text-align: center
+	line-height: 0.8
+	letter-spacing: -0.07em
 
-img 
-	margin: 5px;
-	border: 2px solid black;
-	vertical-align: middle;
-	width: 75px;
-	height: 75px;
+	position: absolute
+	height: hght
+	width: wdth
 
-div.sigButton 
-	position: absolute;
-	left: 5px;
-	width: 75px;
-	height: 75px;
 
 .addButton 
-	background-color: #AA0000;
-	top: 5px;
+	tpos = hMarg
+	bpos = hMarg + hght
+	lpos = lMarg
 
-.remButton 
-	background-color: #0000AA;
-	top: 87px;
+	left: lMarg
+	top: hMarg
+	z-index: 1
+
+	background-color: #EE9A9A
+	color: #50120C
+	border: solid #650000 borderWidth
+	-webkit-border-radius: 3px
+
+	.inside
+		background-color: transparent
+		border: hidden transparent 0px
+		position: absolute
+
+		height: auto
+		width: wdth
+		left: 0px
+		top: unit((hght / 2) - 11.5, px)
+		z-index: 2
+
+.delButton 
+
+	left: unit((spaceBetween + wdth + (2 * borderWidth) + lMarg), px)
+	top: hMarg
+	z-index: 1
+
+	background-color: #9A9AEE
+	color: #0A2643
+	border: solid #002740 borderWidth
+	-webkit-border-radius: 3px
+
+	.inside
+		background-color: transparent
+		border: hidden transparent 0px
+		position: absolute
+
+		height: auto
+		width: wdth
+		left: 0px
+		top: unit((hght / 2) - 11.5, px)
+		z-index: 2
+

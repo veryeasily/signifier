@@ -1,8 +1,10 @@
 
 $(function() {
   var makeIt, removeIt;
-  $("#signer").addClass('addButton');
-  $("#signer2").addClass('remButton');
+  $("#signer").addClass("sigButton").addClass("addButton");
+  $("#signer2").addClass("sigButton").addClass("delButton");
+  $("#text1").addClass("sigButton").addClass("addButton").addClass("inside");
+  $("#text2").addClass("sigButton").addClass("delButton").addClass("inside");
   makeIt = function(e) {
     return chrome.extension.sendRequest({
       greeting: "makeSign"
