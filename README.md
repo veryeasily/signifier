@@ -1,4 +1,11 @@
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png">
+<style = "text/css">
+	#thing {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+	}
+
+<img id="thing" src="https://github.com/silenter/signifier/raw/master/images/icon.png">
 signifier
 =========
 
