@@ -27,3 +27,22 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     return null;
   }
 });
+
+chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+  console.log(sender.tab ? "from content script:" + sender.tab.url : "from the extension");
+  console.log("here's the tab info:");
+  console.log(sender);
+  if (request.signStatus != null) {
+    if (request.signStatus === true) {
+      return chrome.browserAction.setIcon({
+        path: 'images/icon2.png',
+        tabId: sender.tab.id
+      });
+    } else {
+      return chrome.browserAction.setIcon({
+        path: 'images/icon3.png',
+        tabId: sender.tab.id
+      });
+    }
+  }
+});

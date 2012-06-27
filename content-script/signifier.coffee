@@ -9,6 +9,10 @@ class Signifier
 	## I can't remember why I made this
 	@loc: window.location
 
+	@signsFound: false
+
+	@alreadySent: false
+
 	@deleteEntireDatabase: =>
 		@socket.emit 'deleteTheWholeShebang'
 
@@ -89,6 +93,11 @@ class Signifier
 				range.surroundContents wrapper
 				$(wrapper).addClass('signifier').addClass('siggg').data('sigId', link._id).data('sigRev', link._rev)
 				$(this).addClass("siggg")
+				if Signifier.alreadySent isnt true
+					chrome.extension.sendMessage({signStatus: (Signifier.signsFound = true)}, (response) ->
+						Signifier.alreadySent = true
+						console.log response
+					)
 			return actual
 
 		if Array.isArray links.rows
@@ -225,6 +234,9 @@ class Deleter
 					console.log "sig attempted to be deleted"
 					console.log a
 $ ->
+	chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
+		console.log response
+	)
 	Signifier.activate()
 	Sign.activate()
 	return console.log "Signifier activated" if logging

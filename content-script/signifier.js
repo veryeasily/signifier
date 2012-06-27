@@ -8,6 +8,10 @@ Signifier = (function() {
 
   Signifier.loc = window.location;
 
+  Signifier.signsFound = false;
+
+  Signifier.alreadySent = false;
+
   Signifier.deleteEntireDatabase = function() {
     return Signifier.socket.emit('deleteTheWholeShebang');
   };
@@ -130,7 +134,15 @@ Signifier = (function() {
         wrapper.target = '_blank';
         range.surroundContents(wrapper);
         $(wrapper).addClass('signifier').addClass('siggg').data('sigId', link._id).data('sigRev', link._rev);
-        return $(this).addClass("siggg");
+        $(this).addClass("siggg");
+        if (Signifier.alreadySent !== true) {
+          return chrome.extension.sendMessage({
+            signStatus: (Signifier.signsFound = true)
+          }, function(response) {
+            Signifier.alreadySent = true;
+            return console.log(response);
+          });
+        }
       });
       return actual;
     };
@@ -352,6 +364,11 @@ Deleter = (function() {
 })();
 
 $(function() {
+  chrome.extension.sendMessage({
+    signStatus: Signifier.signsFound
+  }, function(response) {
+    return console.log(response);
+  });
   Signifier.activate();
   Sign.activate();
   if (logging) return console.log("Signifier activated");

@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Yo dawg, I heard you like the internet so we...",
   "browser_action": {
-    "default_icon": "images/icon2.png",
+    "default_icon": "images/icon3.png",
 	"default_popup": "chrome/popup.html"
   },
   "background": {
