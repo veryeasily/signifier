@@ -1,9 +1,14 @@
 #
-# IMPORTANT THERE IS ALREADY A METHOD CALLED DELETER IN THE THIRD TAB!!!
-# IMPORTANT THERE IS ALREADY A METHOD CALLED DELETER IN THE THIRD TAB!!!
-# logging boolean to turn on and off logging garbage
-#
+# 	IMPORTANT THERE IS ALREADY A METHOD CALLED DELETER IN THE THIRD TAB!!!
+# 	IMPORTANT THERE IS ALREADY A METHOD CALLED DELETER IN THE THIRD TAB!!!
+#	logging boolean to turn on and off logging garbage
+
 logging = true
+
+# 	Need to start commenting a lot more of this stuff.
+#
+# 	ToDo:  	Direct connections with facebook and twitter to
+# 			lower database load.
 
 class Signifier
 	## I can't remember why I made this

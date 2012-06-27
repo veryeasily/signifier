@@ -1,6 +1,6 @@
 {
   "name": "Signifier",
-  "version": "0.1008",
+  "version": "0.1020",
   "manifest_version": 2,
   "description": "Yo dawg, I heard you like the internet so we...",
   "browser_action": {
