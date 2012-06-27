@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="mystyle.css" />
+<link rel="stylesheet" type="text/css" href="https://raw.github.com/silenter/signifier/master/css/github.css" />
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <colgroup>
