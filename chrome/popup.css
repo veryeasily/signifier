@@ -1,0 +1,18 @@
+body {
+	min-width:138px;
+	overflow-x:hidden;
+}
+
+img {
+	margin:5px;
+	border:2px solid black;
+	vertical-align:middle;
+	width:75px;
+	height:75px;
+}
+
+.sigButton {
+	position: absolute;
+	width:75px;
+	height:75px;
+}
