@@ -1,9 +1,9 @@
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="80%" height="80%">
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png">
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png">
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png">
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png">
-<img src="https://github.com/silenter/signifier/raw/master/images/icon.png">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="96px" height="96px">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="96px" height="96px">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="96px" height="96px">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="96px" height="96px">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="96px" height="96px">
+<img src="https://github.com/silenter/signifier/raw/master/images/icon.png" width="96px" height="96px">
 signifier
 =========
 
