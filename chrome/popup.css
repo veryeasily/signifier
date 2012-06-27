@@ -1,19 +1,31 @@
-body {
-	min-width:138px;
-	overflow-x:hidden;
+html {
+	width: 85px;
+	overflow-x: hidden;
+	background-color: #333333;
+	height: 167px;
 }
 
 img {
-	margin:5px;
-	border:2px solid black;
-	vertical-align:middle;
-	width:75px;
-	height:75px;
+	margin: 5px;
+	border: 2px solid black;
+	vertical-align: middle;
+	width: 75px;
+	height: 75px;
 }
 
-.sigButton {
+div.sigButton {
 	position: absolute;
-	width:75px;
-	height:75px;
-	opacity:0.6;
+	left: 5px;
+	width: 75px;
+	height: 75px;
+}
+
+.addButton {
+	background-color: #AA0000;
+	top: 5px;
+}
+
+.remButton {
+	background-color: #0000AA;
+	top: 87px;
 }
