@@ -1,4 +1,4 @@
-<table border="0" cellpadding="0" cellspacing="0" frame="void" width="100%">
+<table style="border:hidden transparent 0px;" cellpadding="0" cellspacing="0" frame="void" width="100%">
 <colgroup>
 <col class="one">
 <col class="two" align="right">
