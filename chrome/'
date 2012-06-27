@@ -1,0 +1,51 @@
+
+@import 'mixins'
+
+w = 50px
+h = 50px
+mpad = 5px
+tpad = 3px
+lpad = 3px
+
+html 
+	overflow-x: hidden
+	background-color: white
+	height: unit(2 * tpad + h, px)
+	width: unit(2 * (lpad + w) + mpad, px)
+
+img 
+	margin: 5px
+	border: 2px solid black
+	vertical-align: middle
+	width: 75px
+	height: 75px
+
+div.sigButton 
+	font-size: small
+	text-align: center
+	line-height: 1.0
+	position: absolute
+	top: tpad
+	height: h
+	width: w
+	-webkit-border-radius: 3px
+
+.addButton 
+	background-color: #EE9A9A
+	color: black
+	tpos = tpad
+	bpos = tpad + h
+	lpos = lpad
+	left: lpos
+	.inside
+		top: unit(((tpos + bpos) / 2) - 15, px)
+
+.remButton 
+	background-color: #9A9AEE
+	color: black
+	tpos = tpad
+	bpos = tpad + h
+	lpos = lpad + w + mpad
+	left: unit(lpos, px)
+	.inside
+		top: unit(((tpos + bpos) / 2) - 23, px)
