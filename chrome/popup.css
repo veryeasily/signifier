@@ -1,0 +1,54 @@
+html {
+  background-color: #fff;
+  height: 38px;
+  width: 93.25px;
+}
+.sigButton {
+  font-size: small;
+  font-family: 'Port Lligat Sans', sans-serif;
+  text-align: center;
+  line-height: 0.8;
+  letter-spacing: -0.07em;
+  position: absolute;
+  height: 32px;
+  width: 40px;
+}
+.addButton {
+  left: 3.25px;
+  top: 2px;
+  z-index: 1;
+  background-color: #ee9a9a;
+  color: #50120c;
+  border: solid #650000 1px;
+  -webkit-border-radius: 3px;
+}
+.addButton .inside {
+  background-color: transparent;
+  border: hidden transparent 0px;
+  position: absolute;
+  height: auto;
+  width: 40px;
+  left: 0px;
+  top: 4.5px;
+  z-index: 2;
+}
+.delButton {
+  left: 48px;
+  top: 2px;
+  z-index: 1;
+  background-color: #9a9aee;
+  color: #0a2643;
+  border: solid #002740 1px;
+  -webkit-border-radius: 3px;
+}
+.delButton .inside {
+  background-color: transparent;
+  border: hidden transparent 0px;
+  position: absolute;
+  height: auto;
+  width: 40px;
+  left: 0px;
+  top: 4.5px;
+  z-index: 2;
+}
+
