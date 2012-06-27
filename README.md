@@ -4,7 +4,6 @@
 <img id="thing" src="https://github.com/silenter/signifier/raw/master/images/icon.png">
 <img id="thing" src="https://github.com/silenter/signifier/raw/master/images/icon.png">
 <img id="thing" src="https://github.com/silenter/signifier/raw/master/images/icon.png">
-<img id="thing" src="https://github.com/silenter/signifier/raw/master/images/icon.png">
 signifier
 =========
 
