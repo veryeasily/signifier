@@ -10,7 +10,7 @@ logging = true
 # 	ToDo:  	Direct connections with facebook and twitter to
 # 			lower database load.
 
-class Signifier
+class Trace
 	## I can't remember why I made this
 	@loc: window.location
 
@@ -38,7 +38,7 @@ class Signifier
 			if logging
 				console.log "response from heresYourHood!"
 				console.log links
-			Signifier.queWorkingLinks links
+			Trace.queWorkingLinks links
 			observer = new WebKitMutationObserver (mutations) ->
 				if logging then console.log mutations
 				window.mutations = mutations
@@ -62,7 +62,7 @@ class Signifier
 				if logging
 					console.log "Here are the possibleElts of our mutations: "
 					console.log possibleElts
-				Signifier.queWorkingLinks(links, node) for node in possibleElts when node.textContent isnt ""
+				Trace.queWorkingLinks(links, node) for node in possibleElts when node.textContent isnt ""
 
 
 			observer.observe(document.body, {childList: true, subtree: true})
@@ -71,20 +71,20 @@ class Signifier
 	# Once margin text is found, fill in the link if we need to add one.
 	@queWorkingLinks: (links, parent = document.body) ->
 
-		Signifier.fillInSign = (link, parent = document.body) ->
+		Trace.fillInSign = (link, parent = document.body) ->
 			if logging
 				console.log "this is the link ->"
 				console.log link
 			actual = (possibles = $(parent).find("#{link.tag}:contains(#{link.margin})")).filter (ind) ->
-				Signifier.elementIsSmallest(@, possibles) and $(this).hasClass("siggg") isnt true
+				Trace.elementIsSmallest(@, possibles) and $(this).hasClass("siggg") isnt true
 			if logging
 				console.log "this is the possibles"
 				console.log possibles
 				console.log "this is the actuals: "
 				console.log actual
 			actual.each (ind) ->
-				startInfo = Signifier.findTextNode(link.startText || link.text, @)
-				endInfo = Signifier.findTextNode(link.endText || link.text, @)
+				startInfo = Trace.findTextNode(link.startText || link.text, @)
+				endInfo = Trace.findTextNode(link.endText || link.text, @)
 				range = document.createRange()
 				if logging
 					console.log "here is our link info"
@@ -98,9 +98,9 @@ class Signifier
 				range.surroundContents wrapper
 				$(wrapper).addClass('signifier').addClass('siggg').data('sigId', link._id).data('sigRev', link._rev)
 				$(this).addClass("siggg")
-				if Signifier.alreadySent isnt true
-					chrome.extension.sendMessage({signStatus: (Signifier.signsFound = true)}, (response) ->
-						Signifier.alreadySent = true
+				if Trace.alreadySent isnt true
+					chrome.extension.sendMessage({signStatus: (Trace.signsFound = true)}, (response) ->
+						Trace.alreadySent = true
 						console.log response
 					)
 			return actual
@@ -108,7 +108,7 @@ class Signifier
 		if Array.isArray links.rows
 			for a in links.rows when parent.textContent.indexOf(a.value.margin) isnt -1
 				link = a.value
-				Signifier.fillInSign(link, parent)
+				Trace.fillInSign(link, parent)
 
 	@elementIsSmallest: (elt, arr) ->
 		for temp in arr when temp isnt elt
@@ -118,12 +118,12 @@ class Signifier
 
 
 	@activate: ->
-		console.log 'made it to Signifier.activate()!' if logging
-		Signifier.socket = io.connect "http://www.sgnfier.com:7000"
-		Sign.socket = Signifier.socket
-		Signifier.socket.on 'whereYat', (data) ->
+		console.log 'made it to Trace.activate()!' if logging
+		Trace.socket = io.connect "http://www.sgnfier.com:7000"
+		Sign.socket = Trace.socket
+		Trace.socket.on 'whereYat', (data) ->
 			console.log "whereYat recieved!" if logging
-			Signifier.getNeighborhood()
+			Trace.getNeighborhood()
 
 class Sign
 
@@ -145,6 +145,7 @@ class Sign
 			goddamn = (a for a in parent.childNodes)
 			child = @findContainingChild(parent, elt)
 			offset = _.foldl goddamn[0...@getChildIndex child], ((memo, node) -> memo + node.textContent.length), 0
+			#	^^ This is the only time I use underscore.js in the extension?
 			if elt.parentNode isnt parent
 				offset+= @getOffsetToNode(@findContainingChild(parent, elt), elt)
 			console.log "offset being returned from @getOffsetToNode is: #{offset}"
@@ -234,20 +235,20 @@ class Deleter
 				rev = $(a).data('sigRev')
 				b = a.childNodes[0]
 				$(b).unwrap()
-				Signifier.socket.emit 'delete', {id: id, rev: rev}
+				Trace.socket.emit 'delete', {id: id, rev: rev}
 				if logging
 					console.log "sig attempted to be deleted"
 					console.log a
 $ ->
-	chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
+	chrome.extension.sendMessage({signStatus: Trace.signsFound}, (response) ->
 		console.log response
 	)
-	Signifier.activate()
+	Trace.activate()
 	Sign.activate()
-	return console.log "Signifier activated" if logging
-class SigHelpers
+	return console.log "Trace activated" if logging
+class TraceHelpers
 
-	SigHelpers.getTextNodes = (elt) ->
+	TraceHelpers.getTextNodes = (elt) ->
 		SAT = (node) ->
 			if node.nodeType is 3
 				return node
@@ -256,19 +257,19 @@ class SigHelpers
 				return results
 		SAT elt
 
-	SigHelpers.addUpTextLengths = (txtNodeArr) ->
+	TraceHelpers.addUpTextLengths = (txtNodeArr) ->
 		r = 0
 		for a in txtNodeArr
 			r += a.textContent.length
 		return r
 
-	SigHelpers.getTextNodeFromIndex = (arr, num) ->
+	TraceHelpers.getTextNodeFromIndex = (arr, num) ->
 		r = 0
 		i = 0
 		++i while (r+= arr[i].textContent.length) < num
 		return arr[i]
 
-	SigHelpers.getIndexOfContainingChild = (parent, node) ->
+	TraceHelpers.getIndexOfContainingChild = (parent, node) ->
 		arr = new Array(parent.childNodes...)
 		child = arr[0]
 		child = child.nextSibling while !child.contains?(node)

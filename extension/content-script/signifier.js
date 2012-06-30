@@ -1,22 +1,22 @@
-var Deleter, SigHelpers, Sign, Signifier, logging;
+var Deleter, Sign, Trace, TraceHelpers, logging;
 
 logging = true;
 
-Signifier = (function() {
+Trace = (function() {
 
-  function Signifier() {}
+  function Trace() {}
 
-  Signifier.loc = window.location;
+  Trace.loc = window.location;
 
-  Signifier.signsFound = false;
+  Trace.signsFound = false;
 
-  Signifier.alreadySent = false;
+  Trace.alreadySent = false;
 
-  Signifier.deleteEntireDatabase = function() {
-    return Signifier.socket.emit('deleteTheWholeShebang');
+  Trace.deleteEntireDatabase = function() {
+    return Trace.socket.emit('deleteTheWholeShebang');
   };
 
-  Signifier.findTextNode = function(str, node) {
+  Trace.findTextNode = function(str, node) {
     var child, _i, _len, _ref;
     _ref = node.childNodes;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -33,7 +33,7 @@ Signifier = (function() {
     }
   };
 
-  Signifier.getNeighborhood = function() {
+  Trace.getNeighborhood = function() {
     this.socket.emit('chillinAt', {
       host: this.loc.hostname,
       path: this.loc.pathname
@@ -44,7 +44,7 @@ Signifier = (function() {
         console.log("response from heresYourHood!");
         console.log(links);
       }
-      Signifier.queWorkingLinks(links);
+      Trace.queWorkingLinks(links);
       observer = new WebKitMutationObserver(function(mutations) {
         var mutation, node, possibleElts, testNodeForSiggg, _i, _j, _k, _len, _len2, _len3, _ref, _results;
         if (logging) console.log(mutations);
@@ -86,7 +86,7 @@ Signifier = (function() {
         for (_k = 0, _len3 = possibleElts.length; _k < _len3; _k++) {
           node = possibleElts[_k];
           if (node.textContent !== "") {
-            _results.push(Signifier.queWorkingLinks(links, node));
+            _results.push(Trace.queWorkingLinks(links, node));
           }
         }
         return _results;
@@ -98,10 +98,10 @@ Signifier = (function() {
     });
   };
 
-  Signifier.queWorkingLinks = function(links, parent) {
+  Trace.queWorkingLinks = function(links, parent) {
     var a, link, _i, _len, _ref, _results;
     if (parent == null) parent = document.body;
-    Signifier.fillInSign = function(link, parent) {
+    Trace.fillInSign = function(link, parent) {
       var actual, possibles;
       if (parent == null) parent = document.body;
       if (logging) {
@@ -109,7 +109,7 @@ Signifier = (function() {
         console.log(link);
       }
       actual = (possibles = $(parent).find("" + link.tag + ":contains(" + link.margin + ")")).filter(function(ind) {
-        return Signifier.elementIsSmallest(this, possibles) && $(this).hasClass("siggg") !== true;
+        return Trace.elementIsSmallest(this, possibles) && $(this).hasClass("siggg") !== true;
       });
       if (logging) {
         console.log("this is the possibles");
@@ -119,8 +119,8 @@ Signifier = (function() {
       }
       actual.each(function(ind) {
         var endInfo, range, startInfo, wrapper;
-        startInfo = Signifier.findTextNode(link.startText || link.text, this);
-        endInfo = Signifier.findTextNode(link.endText || link.text, this);
+        startInfo = Trace.findTextNode(link.startText || link.text, this);
+        endInfo = Trace.findTextNode(link.endText || link.text, this);
         range = document.createRange();
         if (logging) {
           console.log("here is our link info");
@@ -135,11 +135,11 @@ Signifier = (function() {
         range.surroundContents(wrapper);
         $(wrapper).addClass('signifier').addClass('siggg').data('sigId', link._id).data('sigRev', link._rev);
         $(this).addClass("siggg");
-        if (Signifier.alreadySent !== true) {
+        if (Trace.alreadySent !== true) {
           return chrome.extension.sendMessage({
-            signStatus: (Signifier.signsFound = true)
+            signStatus: (Trace.signsFound = true)
           }, function(response) {
-            Signifier.alreadySent = true;
+            Trace.alreadySent = true;
             return console.log(response);
           });
         }
@@ -153,13 +153,13 @@ Signifier = (function() {
         a = _ref[_i];
         if (!(parent.textContent.indexOf(a.value.margin) !== -1)) continue;
         link = a.value;
-        _results.push(Signifier.fillInSign(link, parent));
+        _results.push(Trace.fillInSign(link, parent));
       }
       return _results;
     }
   };
 
-  Signifier.elementIsSmallest = function(elt, arr) {
+  Trace.elementIsSmallest = function(elt, arr) {
     var temp, _i, _len;
     for (_i = 0, _len = arr.length; _i < _len; _i++) {
       temp = arr[_i];
@@ -168,17 +168,17 @@ Signifier = (function() {
     return true;
   };
 
-  Signifier.activate = function() {
-    if (logging) console.log('made it to Signifier.activate()!');
-    Signifier.socket = io.connect("http://www.sgnfier.com:7000");
-    Sign.socket = Signifier.socket;
-    return Signifier.socket.on('whereYat', function(data) {
+  Trace.activate = function() {
+    if (logging) console.log('made it to Trace.activate()!');
+    Trace.socket = io.connect("http://www.sgnfier.com:7000");
+    Sign.socket = Trace.socket;
+    return Trace.socket.on('whereYat', function(data) {
       if (logging) console.log("whereYat recieved!");
-      return Signifier.getNeighborhood();
+      return Trace.getNeighborhood();
     });
   };
 
-  return Signifier;
+  return Trace;
 
 }).call(this);
 
@@ -342,7 +342,7 @@ Deleter = (function() {
         rev = $(a).data('sigRev');
         b = a.childNodes[0];
         $(b).unwrap();
-        Signifier.socket.emit('delete', {
+        Trace.socket.emit('delete', {
           id: id,
           rev: rev
         });
@@ -365,20 +365,20 @@ Deleter = (function() {
 
 $(function() {
   chrome.extension.sendMessage({
-    signStatus: Signifier.signsFound
+    signStatus: Trace.signsFound
   }, function(response) {
     return console.log(response);
   });
-  Signifier.activate();
+  Trace.activate();
   Sign.activate();
-  if (logging) return console.log("Signifier activated");
+  if (logging) return console.log("Trace activated");
 });
 
-SigHelpers = (function() {
+TraceHelpers = (function() {
 
-  function SigHelpers() {}
+  function TraceHelpers() {}
 
-  SigHelpers.getTextNodes = function(elt) {
+  TraceHelpers.getTextNodes = function(elt) {
     var SAT;
     SAT = function(node) {
       var results, sn, temp, _ref;
@@ -401,7 +401,7 @@ SigHelpers = (function() {
     return SAT(elt);
   };
 
-  SigHelpers.addUpTextLengths = function(txtNodeArr) {
+  TraceHelpers.addUpTextLengths = function(txtNodeArr) {
     var a, r, _i, _len;
     r = 0;
     for (_i = 0, _len = txtNodeArr.length; _i < _len; _i++) {
@@ -411,7 +411,7 @@ SigHelpers = (function() {
     return r;
   };
 
-  SigHelpers.getTextNodeFromIndex = function(arr, num) {
+  TraceHelpers.getTextNodeFromIndex = function(arr, num) {
     var i, r;
     r = 0;
     i = 0;
@@ -421,7 +421,7 @@ SigHelpers = (function() {
     return arr[i];
   };
 
-  SigHelpers.getIndexOfContainingChild = function(parent, node) {
+  TraceHelpers.getIndexOfContainingChild = function(parent, node) {
     var arr, child;
     arr = (function(func, args, ctor) {
       ctor.prototype = func.prototype;
@@ -435,6 +435,6 @@ SigHelpers = (function() {
     return child;
   };
 
-  return SigHelpers;
+  return TraceHelpers;
 
 })();

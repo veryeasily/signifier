@@ -1,8 +1,8 @@
 {
-  "name": "Signifier",
+  "name": "Trace",
   "version": "0.1020",
   "manifest_version": 2,
-  "description": "Yo dawg, I heard you like the internet so we...",
+  "description": "Trace makes text mean more to more people",
   "browser_action": {
     "default_icon": "images/icon3.png",
 	"default_popup": "chrome/popup.html"

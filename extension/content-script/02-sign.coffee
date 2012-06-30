@@ -19,6 +19,7 @@ class Sign
 			goddamn = (a for a in parent.childNodes)
 			child = @findContainingChild(parent, elt)
 			offset = _.foldl goddamn[0...@getChildIndex child], ((memo, node) -> memo + node.textContent.length), 0
+			#	^^ This is the only time I use underscore.js in the extension?
 			if elt.parentNode isnt parent
 				offset+= @getOffsetToNode(@findContainingChild(parent, elt), elt)
 			console.log "offset being returned from @getOffsetToNode is: #{offset}"

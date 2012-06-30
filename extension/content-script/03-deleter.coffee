@@ -10,7 +10,7 @@ class Deleter
 				rev = $(a).data('sigRev')
 				b = a.childNodes[0]
 				$(b).unwrap()
-				Signifier.socket.emit 'delete', {id: id, rev: rev}
+				Trace.socket.emit 'delete', {id: id, rev: rev}
 				if logging
 					console.log "sig attempted to be deleted"
 					console.log a
