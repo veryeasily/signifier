@@ -106,22 +106,23 @@ $(
 				</g>
 				</svg>')
 			# $css.html($css.html() + "\n.rand" + i + " svg {stroke: " + tempy + "; fill: " + tempy + ";}")
-			$("div").remove()
-			a = Math.floor(Math.random() * 30) + 1
+			$("div.crazy").remove()
+			a = Math.floor(Math.random() * 20) + 1
 			for yo in [0...a]
 				r = Math.floor(Math.random() * 9) + 1
 				tempp = this["$thing" + r].clone()
+				tempp.addClass("crazy")
 				trans = Math.random()
 				tempp.css({
 					position: "absolute"
-					left: (Math.floor(Math.random() * 1150))
-					top: (Math.floor(Math.random() * 575))
+					left: (Math.floor(Math.random() * (window.innerWidth - 100)))
+					top: (Math.floor(Math.random() * (window.innerHeight - 100)))
 					opacity: trans
 				})
 				tmp2 = tempp.children("svg")
 				tempy = "#" + getColor() + getColor() + getColor()
 				tmp2.css("stroke", tempy).css("fill", tempy)
 				$(document.body).append(tempp)
+			window.setTimeout(makeCrazy, 100 + Math.random() * 200)
 		makeCrazy()
-		window.setInterval(makeCrazy, 700)
 )

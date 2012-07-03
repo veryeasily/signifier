@@ -2,7 +2,7 @@
 $(function() {
   var makeCrazy;
   makeCrazy = function() {
-    var a, getColor, r, tempp, tempy, tmp2, trans, yo, _results;
+    var a, getColor, r, tempp, tempy, tmp2, trans, yo;
     this.$thing1 = $("<div>");
     this.$thing2 = $("<div>");
     this.$thing3 = $("<div>");
@@ -108,26 +108,25 @@ $(function() {
 					<path d="M52.3,44.921c0.555,2.56,0.333,5.336,0.333,9.469c0,7.723-1.209,13.988-2.708,13.988c-1.494,0-2.703-6.266-2.703-13.988   c0-4.317,0-7.067,0.591-9.638c-1.167-1.356-1.583-5.036-1.583-7.981c0-3.003,0.824-5.622,2.037-6.962v-0.005   c-0.717-0.718-1.177-1.853-1.177-3.125c0-1.884,1.008-3.462,2.359-3.858l0.412-21.188h0.528l0.448,21.204   c1.336,0.412,2.323,1.974,2.323,3.842c0,1.272-0.459,2.407-1.177,3.125v0.005c1.215,1.34,2.037,3.958,2.037,6.962   C54.021,39.976,53.646,43.676,52.3,44.921z"/>\
 				</g>\
 				</svg>');
-    $("div").remove();
-    a = Math.floor(Math.random() * 30) + 1;
-    _results = [];
+    $("div.crazy").remove();
+    a = Math.floor(Math.random() * 20) + 1;
     for (yo = 0; 0 <= a ? yo < a : yo > a; 0 <= a ? yo++ : yo--) {
       r = Math.floor(Math.random() * 9) + 1;
       tempp = this["$thing" + r].clone();
+      tempp.addClass("crazy");
       trans = Math.random();
       tempp.css({
         position: "absolute",
-        left: Math.floor(Math.random() * 1150),
-        top: Math.floor(Math.random() * 575),
+        left: Math.floor(Math.random() * (window.innerWidth - 100)),
+        top: Math.floor(Math.random() * (window.innerHeight - 100)),
         opacity: trans
       });
       tmp2 = tempp.children("svg");
       tempy = "#" + getColor() + getColor() + getColor();
       tmp2.css("stroke", tempy).css("fill", tempy);
-      _results.push($(document.body).append(tempp));
+      $(document.body).append(tempp);
     }
-    return _results;
+    return window.setTimeout(makeCrazy, 100 + Math.random() * 200);
   };
-  makeCrazy();
-  return window.setInterval(makeCrazy, 700);
+  return makeCrazy();
 });
