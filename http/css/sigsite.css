@@ -1,4 +1,3 @@
 body {
-	background-color: red;
-	left: 15px;
+	background: #343434 url('background.png') no-repeat fixed center;
 }
