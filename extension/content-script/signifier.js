@@ -1,22 +1,22 @@
-var Deleter, Sign, Trace, TraceHelpers, logging;
+var Deleter, Sign, Signifier, SignifierHelpers, logging;
 
 logging = true;
 
-Trace = (function() {
+Signifier = (function() {
 
-  function Trace() {}
+  function Signifier() {}
 
-  Trace.loc = window.location;
+  Signifier.loc = window.location;
 
-  Trace.signsFound = false;
+  Signifier.signsFound = false;
 
-  Trace.alreadySent = false;
+  Signifier.alreadySent = false;
 
-  Trace.deleteEntireDatabase = function() {
-    return Trace.socket.emit('deleteTheWholeShebang');
+  Signifier.deleteEntireDatabase = function() {
+    return Signifier.socket.emit('deleteTheWholeShebang');
   };
 
-  Trace.findTextNode = function(str, node) {
+  Signifier.findTextNode = function(str, node) {
     var child, _i, _len, _ref;
     _ref = node.childNodes;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -33,7 +33,7 @@ Trace = (function() {
     }
   };
 
-  Trace.getNeighborhood = function() {
+  Signifier.getNeighborhood = function() {
     this.socket.emit('chillinAt', {
       host: this.loc.hostname,
       path: this.loc.pathname
@@ -44,7 +44,7 @@ Trace = (function() {
         console.log("response from heresYourHood!");
         console.log(links);
       }
-      Trace.queWorkingLinks(links);
+      Signifier.queWorkingLinks(links);
       observer = new WebKitMutationObserver(function(mutations) {
         var mutation, node, possibleElts, testNodeForSiggg, _i, _j, _k, _len, _len2, _len3, _ref, _results;
         if (logging) console.log(mutations);
@@ -86,7 +86,7 @@ Trace = (function() {
         for (_k = 0, _len3 = possibleElts.length; _k < _len3; _k++) {
           node = possibleElts[_k];
           if (node.textContent !== "") {
-            _results.push(Trace.queWorkingLinks(links, node));
+            _results.push(Signifier.queWorkingLinks(links, node));
           }
         }
         return _results;
@@ -98,10 +98,10 @@ Trace = (function() {
     });
   };
 
-  Trace.queWorkingLinks = function(links, parent) {
+  Signifier.queWorkingLinks = function(links, parent) {
     var a, link, _i, _len, _ref, _results;
     if (parent == null) parent = document.body;
-    Trace.fillInSign = function(link, parent) {
+    Signifier.fillInSign = function(link, parent) {
       var actual, possibles;
       if (parent == null) parent = document.body;
       if (logging) {
@@ -109,7 +109,7 @@ Trace = (function() {
         console.log(link);
       }
       actual = (possibles = $(parent).find("" + link.tag + ":contains(" + link.margin + ")")).filter(function(ind) {
-        return Trace.elementIsSmallest(this, possibles) && $(this).hasClass("siggg") !== true;
+        return Signifier.elementIsSmallest(this, possibles) && $(this).hasClass("siggg") !== true;
       });
       if (logging) {
         console.log("this is the possibles");
@@ -119,8 +119,8 @@ Trace = (function() {
       }
       actual.each(function(ind) {
         var endInfo, range, startInfo, wrapper;
-        startInfo = Trace.findTextNode(link.startText || link.text, this);
-        endInfo = Trace.findTextNode(link.endText || link.text, this);
+        startInfo = Signifier.findTextNode(link.startText || link.text, this);
+        endInfo = Signifier.findTextNode(link.endText || link.text, this);
         range = document.createRange();
         if (logging) {
           console.log("here is our link info");
@@ -135,11 +135,11 @@ Trace = (function() {
         range.surroundContents(wrapper);
         $(wrapper).addClass('signifier').addClass('siggg').data('sigId', link._id).data('sigRev', link._rev);
         $(this).addClass("siggg");
-        if (Trace.alreadySent !== true) {
+        if (Signifier.alreadySent !== true) {
           return chrome.extension.sendMessage({
-            signStatus: (Trace.signsFound = true)
+            signStatus: (Signifier.signsFound = true)
           }, function(response) {
-            Trace.alreadySent = true;
+            Signifier.alreadySent = true;
             return console.log(response);
           });
         }
@@ -153,13 +153,13 @@ Trace = (function() {
         a = _ref[_i];
         if (!(parent.textContent.indexOf(a.value.margin) !== -1)) continue;
         link = a.value;
-        _results.push(Trace.fillInSign(link, parent));
+        _results.push(Signifier.fillInSign(link, parent));
       }
       return _results;
     }
   };
 
-  Trace.elementIsSmallest = function(elt, arr) {
+  Signifier.elementIsSmallest = function(elt, arr) {
     var temp, _i, _len;
     for (_i = 0, _len = arr.length; _i < _len; _i++) {
       temp = arr[_i];
@@ -168,17 +168,17 @@ Trace = (function() {
     return true;
   };
 
-  Trace.activate = function() {
-    if (logging) console.log('made it to Trace.activate()!');
-    Trace.socket = io.connect("http://www.sgnfier.com:7000");
-    Sign.socket = Trace.socket;
-    return Trace.socket.on('whereYat', function(data) {
+  Signifier.activate = function() {
+    if (logging) console.log('made it to Signifier.activate()!');
+    Signifier.socket = io.connect("http://www.sgnfier.com:7000");
+    Sign.socket = Signifier.socket;
+    return Signifier.socket.on('whereYat', function(data) {
       if (logging) console.log("whereYat recieved!");
-      return Trace.getNeighborhood();
+      return Signifier.getNeighborhood();
     });
   };
 
-  return Trace;
+  return Signifier;
 
 }).call(this);
 
@@ -206,7 +206,7 @@ Sign = (function() {
   Sign.getOffsetToNode = function(parent, elt) {
     var a, child, goddamn, offset;
     if (parent === elt) {
-      console.log("returning without reducing");
+      if (logging) console.log("returning without reducing");
       return 0;
     } else {
       goddamn = (function() {
@@ -226,34 +226,42 @@ Sign = (function() {
       if (elt.parentNode !== parent) {
         offset += Sign.getOffsetToNode(Sign.findContainingChild(parent, elt), elt);
       }
-      console.log("offset being returned from @getOffsetToNode is: " + offset);
+      if (logging) {
+        console.log("offset being returned from @getOffsetToNode is: " + offset);
+      }
       return offset;
     }
   };
 
   Sign.getMargin = function(range) {
     var endOffset, left, right, send, startOffset;
-    console.log("range is =");
-    console.log(range);
+    if (logging) {
+      console.log("range is =");
+      console.log(range);
+    }
     startOffset = Sign.getOffsetToNode(range.commonAncestorContainer, range.startContainer) + range.startOffset;
-    console.log("startOffset = " + startOffset);
+    if (logging) console.log("startOffset = " + startOffset);
     endOffset = Sign.getOffsetToNode(range.commonAncestorContainer, range.endContainer) + range.endOffset;
-    console.log("endOffset = " + endOffset);
+    if (logging) console.log("endOffset = " + endOffset);
     left = Math.max(0, startOffset - 10);
     right = Math.min(range.commonAncestorContainer.textContent.length, endOffset + 10);
-    console.log("here is the index of our margin");
-    console.log([left, right]);
-    console.log("here is range.commonAncestorContainer.textContent");
-    console.log(range.commonAncestorContainer.textContent);
-    console.log("here is our margin!");
-    console.log((send = range.commonAncestorContainer.textContent.slice(left, right)));
+    if (logging) {
+      console.log("here is the index of our margin");
+      console.log([left, right]);
+      console.log("here is range.commonAncestorContainer.textContent");
+      console.log(range.commonAncestorContainer.textContent);
+      console.log("here is our margin!");
+    }
+    if (logging) {
+      console.log((send = range.commonAncestorContainer.textContent.slice(left, right)));
+    }
     return send;
   };
 
   function Sign() {
     var end, endStr, parent, range, sel, start, startStr, thing, url, _ref, _ref2, _ref3;
     sel = document.getSelection();
-    console.log("made it to the try");
+    if (logging) console.log("made it to the try");
     try {
       if (sel.type !== "Range") {
         alert("no selection!");
@@ -275,7 +283,7 @@ Sign = (function() {
       throw error;
     }
     url = prompt("give link url", "http://www.awebsite.com");
-    console.log("made it past the try");
+    if (logging) console.log("made it past the try");
     _ref = range = sel.getRangeAt(0), start = _ref.startContainer, (_ref2 = _ref.startContainer, startStr = _ref2.textContent), end = _ref.endContainer, (_ref3 = _ref.endContainer, endStr = _ref3.textContent);
     this.toDB = {
       tag: parent.tagName,
@@ -292,7 +300,9 @@ Sign = (function() {
       this.toDB.startText = startStr.slice(range.startOffset, startStr.length + 1);
       this.toDB.endText = endStr.slice(0, range.endOffset);
     }
-    console.log("" + this.toDB.startText + " is startText, " + this.toDB.endText + " is endText");
+    if (logging) {
+      console.log("" + this.toDB.startText + " is startText, " + this.toDB.endText + " is endText");
+    }
     thing = document.createElement('a');
     thing.href = url;
     thing.target = '_blank';
@@ -342,7 +352,7 @@ Deleter = (function() {
         rev = $(a).data('sigRev');
         b = a.childNodes[0];
         $(b).unwrap();
-        Trace.socket.emit('delete', {
+        Signifier.socket.emit('delete', {
           id: id,
           rev: rev
         });
@@ -365,20 +375,20 @@ Deleter = (function() {
 
 $(function() {
   chrome.extension.sendMessage({
-    signStatus: Trace.signsFound
+    signStatus: Signifier.signsFound
   }, function(response) {
-    return console.log(response);
+    if (logging) return console.log(response);
   });
-  Trace.activate();
+  Signifier.activate();
   Sign.activate();
-  if (logging) return console.log("Trace activated");
+  if (logging) return console.log("Signifier activated");
 });
 
-TraceHelpers = (function() {
+SignifierHelpers = (function() {
 
-  function TraceHelpers() {}
+  function SignifierHelpers() {}
 
-  TraceHelpers.getTextNodes = function(elt) {
+  SignifierHelpers.getTextNodes = function(elt) {
     var SAT;
     SAT = function(node) {
       var results, sn, temp, _ref;
@@ -401,7 +411,7 @@ TraceHelpers = (function() {
     return SAT(elt);
   };
 
-  TraceHelpers.addUpTextLengths = function(txtNodeArr) {
+  SignifierHelpers.addUpTextLengths = function(txtNodeArr) {
     var a, r, _i, _len;
     r = 0;
     for (_i = 0, _len = txtNodeArr.length; _i < _len; _i++) {
@@ -411,7 +421,7 @@ TraceHelpers = (function() {
     return r;
   };
 
-  TraceHelpers.getTextNodeFromIndex = function(arr, num) {
+  SignifierHelpers.getTextNodeFromIndex = function(arr, num) {
     var i, r;
     r = 0;
     i = 0;
@@ -421,7 +431,7 @@ TraceHelpers = (function() {
     return arr[i];
   };
 
-  TraceHelpers.getIndexOfContainingChild = function(parent, node) {
+  SignifierHelpers.getIndexOfContainingChild = function(parent, node) {
     var arr, child;
     arr = (function(func, args, ctor) {
       ctor.prototype = func.prototype;
@@ -435,6 +445,6 @@ TraceHelpers = (function() {
     return child;
   };
 
-  return TraceHelpers;
+  return SignifierHelpers;
 
 })();

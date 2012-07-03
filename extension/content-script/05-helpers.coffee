@@ -1,6 +1,6 @@
-class TraceHelpers
+class SignifierHelpers
 
-	TraceHelpers.getTextNodes = (elt) ->
+	SignifierHelpers.getTextNodes = (elt) ->
 		SAT = (node) ->
 			if node.nodeType is 3
 				return node
@@ -9,19 +9,19 @@ class TraceHelpers
 				return results
 		SAT elt
 
-	TraceHelpers.addUpTextLengths = (txtNodeArr) ->
+	SignifierHelpers.addUpTextLengths = (txtNodeArr) ->
 		r = 0
 		for a in txtNodeArr
 			r += a.textContent.length
 		return r
 
-	TraceHelpers.getTextNodeFromIndex = (arr, num) ->
+	SignifierHelpers.getTextNodeFromIndex = (arr, num) ->
 		r = 0
 		i = 0
 		++i while (r+= arr[i].textContent.length) < num
 		return arr[i]
 
-	TraceHelpers.getIndexOfContainingChild = (parent, node) ->
+	SignifierHelpers.getIndexOfContainingChild = (parent, node) ->
 		arr = new Array(parent.childNodes...)
 		child = arr[0]
 		child = child.nextSibling while !child.contains?(node)

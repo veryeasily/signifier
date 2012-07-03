@@ -9,8 +9,9 @@ logging = true
 #
 # 	ToDo:  	Direct connections with facebook and twitter to
 # 			lower database load.
+#
 
-class Trace
+class Signifier
 	## I can't remember why I made this
 	@loc: window.location
 
@@ -27,7 +28,7 @@ class Trace
 				if logging then console.log child
 				return [child, child.data.indexOf(str)]
 			else if child.nodeType is 1
-				if logging then console.log "dove a level deeper with findTextNode"
+				console.log "dove a level deeper with findTextNode" if logging
 				@findTextNode str, child
 
 	@getNeighborhood: ->
@@ -38,9 +39,9 @@ class Trace
 			if logging
 				console.log "response from heresYourHood!"
 				console.log links
-			Trace.queWorkingLinks links
+			Signifier.queWorkingLinks links
 			observer = new WebKitMutationObserver (mutations) ->
-				if logging then console.log mutations
+				console.log mutations if logging
 				window.mutations = mutations
 				possibleElts = []
 
@@ -62,7 +63,7 @@ class Trace
 				if logging
 					console.log "Here are the possibleElts of our mutations: "
 					console.log possibleElts
-				Trace.queWorkingLinks(links, node) for node in possibleElts when node.textContent isnt ""
+				Signifier.queWorkingLinks(links, node) for node in possibleElts when node.textContent isnt ""
 
 
 			observer.observe(document.body, {childList: true, subtree: true})
@@ -71,20 +72,20 @@ class Trace
 	# Once margin text is found, fill in the link if we need to add one.
 	@queWorkingLinks: (links, parent = document.body) ->
 
-		Trace.fillInSign = (link, parent = document.body) ->
+		Signifier.fillInSign = (link, parent = document.body) ->
 			if logging
 				console.log "this is the link ->"
 				console.log link
 			actual = (possibles = $(parent).find("#{link.tag}:contains(#{link.margin})")).filter (ind) ->
-				Trace.elementIsSmallest(@, possibles) and $(this).hasClass("siggg") isnt true
+				Signifier.elementIsSmallest(@, possibles) and $(this).hasClass("siggg") isnt true
 			if logging
 				console.log "this is the possibles"
 				console.log possibles
 				console.log "this is the actuals: "
 				console.log actual
 			actual.each (ind) ->
-				startInfo = Trace.findTextNode(link.startText || link.text, @)
-				endInfo = Trace.findTextNode(link.endText || link.text, @)
+				startInfo = Signifier.findTextNode(link.startText || link.text, @)
+				endInfo = Signifier.findTextNode(link.endText || link.text, @)
 				range = document.createRange()
 				if logging
 					console.log "here is our link info"
@@ -98,9 +99,9 @@ class Trace
 				range.surroundContents wrapper
 				$(wrapper).addClass('signifier').addClass('siggg').data('sigId', link._id).data('sigRev', link._rev)
 				$(this).addClass("siggg")
-				if Trace.alreadySent isnt true
-					chrome.extension.sendMessage({signStatus: (Trace.signsFound = true)}, (response) ->
-						Trace.alreadySent = true
+				if Signifier.alreadySent isnt true
+					chrome.extension.sendMessage({signStatus: (Signifier.signsFound = true)}, (response) ->
+						Signifier.alreadySent = true
 						console.log response
 					)
 			return actual
@@ -108,7 +109,7 @@ class Trace
 		if Array.isArray links.rows
 			for a in links.rows when parent.textContent.indexOf(a.value.margin) isnt -1
 				link = a.value
-				Trace.fillInSign(link, parent)
+				Signifier.fillInSign(link, parent)
 
 	@elementIsSmallest: (elt, arr) ->
 		for temp in arr when temp isnt elt
@@ -118,9 +119,9 @@ class Trace
 
 
 	@activate: ->
-		console.log 'made it to Trace.activate()!' if logging
-		Trace.socket = io.connect "http://www.sgnfier.com:7000"
-		Sign.socket = Trace.socket
-		Trace.socket.on 'whereYat', (data) ->
+		console.log 'made it to Signifier.activate()!' if logging
+		Signifier.socket = io.connect "http://www.sgnfier.com:7000"
+		Sign.socket = Signifier.socket
+		Signifier.socket.on 'whereYat', (data) ->
 			console.log "whereYat recieved!" if logging
-			Trace.getNeighborhood()
+			Signifier.getNeighborhood()

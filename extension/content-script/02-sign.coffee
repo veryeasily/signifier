@@ -1,3 +1,16 @@
+#	A sign is what we add to the database whenever somebody makes a new link.
+#	It contains a copy of the links URL, the host and path where the selected
+#	text was located, information about the text that was selected, and a margin
+#	around the text to make sure we find the right guy when we search for it later.
+#
+#	Because of complications with the range object, I store the tag name of the
+#	CommonAncestor HTML element that contains the entire selection.  I also store
+#	the parent element for the textNode that the selection begins and terminates in.
+#	An important part of working with these range objects is to realize the difference
+#	between 'elements' and 'nodes'.  Elements can only be HTML tags and not the variety
+#	of other options.
+#
+#	For future reference, CAC = CommonAncestorContainer
 
 class Sign
 
@@ -13,7 +26,7 @@ class Sign
 
 	@getOffsetToNode: (parent, elt) =>
 		if parent is elt
-			console.log "returning without reducing"
+			console.log "returning without reducing" if logging
 			return 0
 		else
 			goddamn = (a for a in parent.childNodes)
@@ -22,30 +35,47 @@ class Sign
 			#	^^ This is the only time I use underscore.js in the extension?
 			if elt.parentNode isnt parent
 				offset+= @getOffsetToNode(@findContainingChild(parent, elt), elt)
-			console.log "offset being returned from @getOffsetToNode is: #{offset}"
+			console.log "offset being returned from @getOffsetToNode is: #{offset}" if logging
 			return offset
 
 	@getMargin: (range) =>
-		console.log "range is ="
-		console.log range
+		if logging
+			console.log "range is ="
+			console.log range
+
+		#	Calculates the offset through ALL child nodes of the CAC to range.startContainer (a text node)
 		startOffset = @getOffsetToNode(range.commonAncestorContainer, range.startContainer) + range.startOffset
-		console.log "startOffset = #{startOffset}"
+		console.log "startOffset = #{startOffset}" if logging
+
+
+		#	Same deal here but with range.endContainer
 		endOffset = @getOffsetToNode(range.commonAncestorContainer, range.endContainer) + range.endOffset
-		console.log "endOffset = #{endOffset}"
+		console.log "endOffset = #{endOffset}" if logging
+
+
+		#	Grab 10 letters to the left and right of the selection unless we're out of room
 		left = Math.max(0, startOffset - 10)
 		right = Math.min(range.commonAncestorContainer.textContent.length, endOffset + 10)
-		console.log "here is the index of our margin"
-		console.log [left, right]
-		console.log "here is range.commonAncestorContainer.textContent"
-		console.log range.commonAncestorContainer.textContent
-		console.log "here is our margin!"
-		console.log (send = range.commonAncestorContainer.textContent.slice(left, right))
+		if logging
+			console.log "here is the index of our margin"
+			console.log [left, right]
+			console.log "here is range.commonAncestorContainer.textContent"
+			console.log range.commonAncestorContainer.textContent
+			console.log "here is our margin!"
+
+		#	Little trick here where I assign the variable within console.log
+		#	Coffeescript returns the last line of every function, so we send 'send' back
+		#	to the caller
+		console.log (send = range.commonAncestorContainer.textContent.slice(left, right)) if logging
 		send
 
-	constructor: () ->
 
+	#	Coffeescript has constructors!  Let's use them!?
+	constructor: () ->
 		sel = document.getSelection()
-		console.log "made it to the try"
+		console.log "made it to the try" if logging
+
+		#	Make sure the Range isn't crazy
 		try
 			if sel.type isnt "Range"
 				alert "no selection!"
@@ -60,8 +90,10 @@ class Sign
 				return
 		catch error
 			throw error
+
+		#	In the future I will use something cooler than window.prompt
 		url = prompt("give link url", "http://www.awebsite.com")
-		console.log "made it past the try"
+		console.log "made it past the try" if logging
 		{startContainer: start, startContainer: {textContent: startStr}, endContainer: end, endContainer: {textContent: endStr}} = range = sel.getRangeAt 0
 	
 		@toDB =
@@ -78,7 +110,7 @@ class Sign
 			console.log "trying to slice each container"
 			@toDB.startText = startStr.slice range.startOffset, startStr.length + 1
 			@toDB.endText = endStr.slice 0, range.endOffset
-		console.log "#{@toDB.startText} is startText, #{@toDB.endText} is endText"
+		console.log "#{@toDB.startText} is startText, #{@toDB.endText} is endText" if logging
 		thing = document.createElement('a')
 		thing.href = url
 		thing.target = '_blank'

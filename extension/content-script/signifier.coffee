@@ -9,8 +9,9 @@ logging = true
 #
 # 	ToDo:  	Direct connections with facebook and twitter to
 # 			lower database load.
+#
 
-class Trace
+class Signifier
 	## I can't remember why I made this
 	@loc: window.location
 
@@ -27,7 +28,7 @@ class Trace
 				if logging then console.log child
 				return [child, child.data.indexOf(str)]
 			else if child.nodeType is 1
-				if logging then console.log "dove a level deeper with findTextNode"
+				console.log "dove a level deeper with findTextNode" if logging
 				@findTextNode str, child
 
 	@getNeighborhood: ->
@@ -38,9 +39,9 @@ class Trace
 			if logging
 				console.log "response from heresYourHood!"
 				console.log links
-			Trace.queWorkingLinks links
+			Signifier.queWorkingLinks links
 			observer = new WebKitMutationObserver (mutations) ->
-				if logging then console.log mutations
+				console.log mutations if logging
 				window.mutations = mutations
 				possibleElts = []
 
@@ -62,7 +63,7 @@ class Trace
 				if logging
 					console.log "Here are the possibleElts of our mutations: "
 					console.log possibleElts
-				Trace.queWorkingLinks(links, node) for node in possibleElts when node.textContent isnt ""
+				Signifier.queWorkingLinks(links, node) for node in possibleElts when node.textContent isnt ""
 
 
 			observer.observe(document.body, {childList: true, subtree: true})
@@ -71,20 +72,20 @@ class Trace
 	# Once margin text is found, fill in the link if we need to add one.
 	@queWorkingLinks: (links, parent = document.body) ->
 
-		Trace.fillInSign = (link, parent = document.body) ->
+		Signifier.fillInSign = (link, parent = document.body) ->
 			if logging
 				console.log "this is the link ->"
 				console.log link
 			actual = (possibles = $(parent).find("#{link.tag}:contains(#{link.margin})")).filter (ind) ->
-				Trace.elementIsSmallest(@, possibles) and $(this).hasClass("siggg") isnt true
+				Signifier.elementIsSmallest(@, possibles) and $(this).hasClass("siggg") isnt true
 			if logging
 				console.log "this is the possibles"
 				console.log possibles
 				console.log "this is the actuals: "
 				console.log actual
 			actual.each (ind) ->
-				startInfo = Trace.findTextNode(link.startText || link.text, @)
-				endInfo = Trace.findTextNode(link.endText || link.text, @)
+				startInfo = Signifier.findTextNode(link.startText || link.text, @)
+				endInfo = Signifier.findTextNode(link.endText || link.text, @)
 				range = document.createRange()
 				if logging
 					console.log "here is our link info"
@@ -98,9 +99,9 @@ class Trace
 				range.surroundContents wrapper
 				$(wrapper).addClass('signifier').addClass('siggg').data('sigId', link._id).data('sigRev', link._rev)
 				$(this).addClass("siggg")
-				if Trace.alreadySent isnt true
-					chrome.extension.sendMessage({signStatus: (Trace.signsFound = true)}, (response) ->
-						Trace.alreadySent = true
+				if Signifier.alreadySent isnt true
+					chrome.extension.sendMessage({signStatus: (Signifier.signsFound = true)}, (response) ->
+						Signifier.alreadySent = true
 						console.log response
 					)
 			return actual
@@ -108,7 +109,7 @@ class Trace
 		if Array.isArray links.rows
 			for a in links.rows when parent.textContent.indexOf(a.value.margin) isnt -1
 				link = a.value
-				Trace.fillInSign(link, parent)
+				Signifier.fillInSign(link, parent)
 
 	@elementIsSmallest: (elt, arr) ->
 		for temp in arr when temp isnt elt
@@ -118,12 +119,25 @@ class Trace
 
 
 	@activate: ->
-		console.log 'made it to Trace.activate()!' if logging
-		Trace.socket = io.connect "http://www.sgnfier.com:7000"
-		Sign.socket = Trace.socket
-		Trace.socket.on 'whereYat', (data) ->
+		console.log 'made it to Signifier.activate()!' if logging
+		Signifier.socket = io.connect "http://www.sgnfier.com:7000"
+		Sign.socket = Signifier.socket
+		Signifier.socket.on 'whereYat', (data) ->
 			console.log "whereYat recieved!" if logging
-			Trace.getNeighborhood()
+			Signifier.getNeighborhood()
+#	A sign is what we add to the database whenever somebody makes a new link.
+#	It contains a copy of the links URL, the host and path where the selected
+#	text was located, information about the text that was selected, and a margin
+#	around the text to make sure we find the right guy when we search for it later.
+#
+#	Because of complications with the range object, I store the tag name of the
+#	CommonAncestor HTML element that contains the entire selection.  I also store
+#	the parent element for the textNode that the selection begins and terminates in.
+#	An important part of working with these range objects is to realize the difference
+#	between 'elements' and 'nodes'.  Elements can only be HTML tags and not the variety
+#	of other options.
+#
+#	For future reference, CAC = CommonAncestorContainer
 
 class Sign
 
@@ -139,7 +153,7 @@ class Sign
 
 	@getOffsetToNode: (parent, elt) =>
 		if parent is elt
-			console.log "returning without reducing"
+			console.log "returning without reducing" if logging
 			return 0
 		else
 			goddamn = (a for a in parent.childNodes)
@@ -148,30 +162,47 @@ class Sign
 			#	^^ This is the only time I use underscore.js in the extension?
 			if elt.parentNode isnt parent
 				offset+= @getOffsetToNode(@findContainingChild(parent, elt), elt)
-			console.log "offset being returned from @getOffsetToNode is: #{offset}"
+			console.log "offset being returned from @getOffsetToNode is: #{offset}" if logging
 			return offset
 
 	@getMargin: (range) =>
-		console.log "range is ="
-		console.log range
+		if logging
+			console.log "range is ="
+			console.log range
+
+		#	Calculates the offset through ALL child nodes of the CAC to range.startContainer (a text node)
 		startOffset = @getOffsetToNode(range.commonAncestorContainer, range.startContainer) + range.startOffset
-		console.log "startOffset = #{startOffset}"
+		console.log "startOffset = #{startOffset}" if logging
+
+
+		#	Same deal here but with range.endContainer
 		endOffset = @getOffsetToNode(range.commonAncestorContainer, range.endContainer) + range.endOffset
-		console.log "endOffset = #{endOffset}"
+		console.log "endOffset = #{endOffset}" if logging
+
+
+		#	Grab 10 letters to the left and right of the selection unless we're out of room
 		left = Math.max(0, startOffset - 10)
 		right = Math.min(range.commonAncestorContainer.textContent.length, endOffset + 10)
-		console.log "here is the index of our margin"
-		console.log [left, right]
-		console.log "here is range.commonAncestorContainer.textContent"
-		console.log range.commonAncestorContainer.textContent
-		console.log "here is our margin!"
-		console.log (send = range.commonAncestorContainer.textContent.slice(left, right))
+		if logging
+			console.log "here is the index of our margin"
+			console.log [left, right]
+			console.log "here is range.commonAncestorContainer.textContent"
+			console.log range.commonAncestorContainer.textContent
+			console.log "here is our margin!"
+
+		#	Little trick here where I assign the variable within console.log
+		#	Coffeescript returns the last line of every function, so we send 'send' back
+		#	to the caller
+		console.log (send = range.commonAncestorContainer.textContent.slice(left, right)) if logging
 		send
 
-	constructor: () ->
 
+	#	Coffeescript has constructors!  Let's use them!?
+	constructor: () ->
 		sel = document.getSelection()
-		console.log "made it to the try"
+		console.log "made it to the try" if logging
+
+		#	Make sure the Range isn't crazy
 		try
 			if sel.type isnt "Range"
 				alert "no selection!"
@@ -186,8 +217,10 @@ class Sign
 				return
 		catch error
 			throw error
+
+		#	In the future I will use something cooler than window.prompt
 		url = prompt("give link url", "http://www.awebsite.com")
-		console.log "made it past the try"
+		console.log "made it past the try" if logging
 		{startContainer: start, startContainer: {textContent: startStr}, endContainer: end, endContainer: {textContent: endStr}} = range = sel.getRangeAt 0
 	
 		@toDB =
@@ -204,7 +237,7 @@ class Sign
 			console.log "trying to slice each container"
 			@toDB.startText = startStr.slice range.startOffset, startStr.length + 1
 			@toDB.endText = endStr.slice 0, range.endOffset
-		console.log "#{@toDB.startText} is startText, #{@toDB.endText} is endText"
+		console.log "#{@toDB.startText} is startText, #{@toDB.endText} is endText" if logging
 		thing = document.createElement('a')
 		thing.href = url
 		thing.target = '_blank'
@@ -223,6 +256,10 @@ class Sign
 			removeSign = ->
 				Deleter.removeSigsInSel()
 			do removeSign if request.greeting is "removeSign"
+#	I got tired of deleting all the database entries by hand each time.
+#	CouchDB sucks at mass deleting documents.  Again, if anyone
+#	has any tips, shoot me an email!
+
 class Deleter
 
 	@removeSigsInSel: ->
@@ -235,20 +272,21 @@ class Deleter
 				rev = $(a).data('sigRev')
 				b = a.childNodes[0]
 				$(b).unwrap()
-				Trace.socket.emit 'delete', {id: id, rev: rev}
+				Signifier.socket.emit 'delete', {id: id, rev: rev}
 				if logging
 					console.log "sig attempted to be deleted"
 					console.log a
 $ ->
-	chrome.extension.sendMessage({signStatus: Trace.signsFound}, (response) ->
-		console.log response
+	chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
+		console.log response if logging
 	)
-	Trace.activate()
+	Signifier.activate()
 	Sign.activate()
-	return console.log "Trace activated" if logging
-class TraceHelpers
+	if logging
+		return console.log "Signifier activated"
+class SignifierHelpers
 
-	TraceHelpers.getTextNodes = (elt) ->
+	SignifierHelpers.getTextNodes = (elt) ->
 		SAT = (node) ->
 			if node.nodeType is 3
 				return node
@@ -257,19 +295,19 @@ class TraceHelpers
 				return results
 		SAT elt
 
-	TraceHelpers.addUpTextLengths = (txtNodeArr) ->
+	SignifierHelpers.addUpTextLengths = (txtNodeArr) ->
 		r = 0
 		for a in txtNodeArr
 			r += a.textContent.length
 		return r
 
-	TraceHelpers.getTextNodeFromIndex = (arr, num) ->
+	SignifierHelpers.getTextNodeFromIndex = (arr, num) ->
 		r = 0
 		i = 0
 		++i while (r+= arr[i].textContent.length) < num
 		return arr[i]
 
-	TraceHelpers.getIndexOfContainingChild = (parent, node) ->
+	SignifierHelpers.getIndexOfContainingChild = (parent, node) ->
 		arr = new Array(parent.childNodes...)
 		child = arr[0]
 		child = child.nextSibling while !child.contains?(node)

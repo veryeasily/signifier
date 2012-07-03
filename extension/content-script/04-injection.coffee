@@ -1,7 +1,8 @@
 $ ->
-	chrome.extension.sendMessage({signStatus: Trace.signsFound}, (response) ->
-		console.log response
+	chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
+		console.log response if logging
 	)
-	Trace.activate()
+	Signifier.activate()
 	Sign.activate()
-	return console.log "Trace activated" if logging
+	if logging
+		return console.log "Signifier activated"

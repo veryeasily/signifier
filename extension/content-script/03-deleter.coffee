@@ -1,3 +1,7 @@
+#	I got tired of deleting all the database entries by hand each time.
+#	CouchDB sucks at mass deleting documents.  Again, if anyone
+#	has any tips, shoot me an email!
+
 class Deleter
 
 	@removeSigsInSel: ->
@@ -10,7 +14,7 @@ class Deleter
 				rev = $(a).data('sigRev')
 				b = a.childNodes[0]
 				$(b).unwrap()
-				Trace.socket.emit 'delete', {id: id, rev: rev}
+				Signifier.socket.emit 'delete', {id: id, rev: rev}
 				if logging
 					console.log "sig attempted to be deleted"
 					console.log a
