@@ -1,3 +1,41 @@
 body {
 	background: #343434 url('background.png') no-repeat fixed center;
 }
+
+div.main-nav {
+	position: absolute;
+	left: 3%;
+	bottom: 0%;
+	width: 94%;
+	height: 7%;
+	background-color: #444444;
+	opacity: 0.8;
+	z-index: 10;
+}
+
+.menB {
+	height: 67%;
+	width: 2.7%;
+	position: absolute;
+	top: 16.5%;
+}
+
+div.but1 {
+	background-color: red;
+	right: 24.1%;
+}
+
+div.but2 {
+	background-color: yellow;
+	right: 27.9%;
+}
+
+div.but3 {
+	background-color: green;
+	right: 31.7%;
+}
+
+div.but4 {
+	background-color: blue;
+	right: 35.5%;
+}

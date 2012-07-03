@@ -1,8 +1,32 @@
 
 $(function() {
-  var makeCrazy;
+  var buttonGo, getColor, getColor2, getColor3, getColor4, makeCrazy;
+  getColor3 = function() {
+    var a, b;
+    a = (Math.floor(Math.random() * 2) + 0).toString(16);
+    b = (Math.floor(Math.random() * 2) + 6).toString(16);
+    return a + b;
+  };
+  getColor4 = function() {
+    var a, b;
+    a = (Math.floor(Math.random() * 2) + 4).toString(16);
+    b = (Math.floor(Math.random() * 2) + 4).toString(16);
+    return a + b;
+  };
+  getColor2 = function() {
+    var a, b;
+    a = (Math.floor(Math.random() * 6) + 9).toString(16);
+    b = (Math.floor(Math.random() * 6) + 9).toString(16);
+    return a + b;
+  };
+  getColor = function() {
+    var a, b;
+    a = (Math.floor(Math.random() * 14) + 2).toString(16);
+    b = (Math.floor(Math.random() * 14) + 2).toString(16);
+    return a + b;
+  };
   makeCrazy = function() {
-    var a, getColor, r, tempp, tempy, tmp2, trans, yo;
+    var a, r, tempp, tempy, tmp2, trans, yo;
     this.$thing1 = $("<div>");
     this.$thing2 = $("<div>");
     this.$thing3 = $("<div>");
@@ -12,12 +36,6 @@ $(function() {
     this.$thing7 = $("<div>");
     this.$thing8 = $("<div>");
     this.$thing9 = $("<div>");
-    getColor = function() {
-      var a, b;
-      a = (Math.floor(Math.random() * 14) + 2).toString(16);
-      b = (Math.floor(Math.random() * 14) + 2).toString(16);
-      return a + b;
-    };
     tempy = "#" + getColor() + getColor() + getColor();
     this.$thing1.html('<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" style="stroke: ' + tempy + '; fill: ' + tempy + ';" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
 				   width="98.455px" height="100px" viewBox="0 0 98.455 100" enable-background="new 0 0 98.455 100" xml:space="preserve">\
@@ -114,7 +132,7 @@ $(function() {
       r = Math.floor(Math.random() * 9) + 1;
       tempp = this["$thing" + r].clone();
       tempp.addClass("crazy");
-      trans = Math.random();
+      trans = Math.random() * .9;
       tempp.css({
         position: "absolute",
         left: Math.floor(Math.random() * (window.innerWidth - 100)),
@@ -126,7 +144,16 @@ $(function() {
       tmp2.css("stroke", tempy).css("fill", tempy);
       $(document.body).append(tempp);
     }
-    return window.setTimeout(makeCrazy, 100 + Math.random() * 200);
+    return window.setTimeout(makeCrazy, 50 + Math.random() * 350);
   };
-  return makeCrazy();
+  makeCrazy();
+  buttonGo = function() {
+    $(".menB").each(function(elt) {
+      return $(this).css({
+        "background-color": "#" + getColor4() + getColor3() + getColor2()
+      });
+    });
+    return window.setTimeout(buttonGo, Math.random() * 50 + 675);
+  };
+  return buttonGo();
 });
