@@ -1,5 +1,6 @@
 body {
 	background: #343434 url('background2.png') no-repeat fixed center;
+	background-position: top;
 }
 
 div.main-nav {
