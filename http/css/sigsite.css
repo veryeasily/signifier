@@ -1,6 +1,6 @@
 body {
-	background: #343434 url('background8.png') no-repeat fixed center;
-	background-position: top;
+	background: #343434 url('background15.png') no-repeat fixed;
+	background-position: center 1.5%;
 }
 
 div.main-nav {
@@ -22,21 +22,21 @@ div.main-nav {
 }
 
 div.but1 {
-	background-color: red;
-	right: 25.6%;
+	background-color: blue;
+	right: 35.5%;
 }
 
 div.but2 {
-	background-color: yellow;
-	right: 28.9%;
-}
-
-div.but3 {
 	background-color: green;
 	right: 32.2%;
 }
 
+div.but3 {
+	background-color: yellow;
+	right: 28.9%;
+}
+
 div.but4 {
-	background-color: blue;
-	right: 35.5%;
+	background-color: red;
+	right: 25.6%;
 }
