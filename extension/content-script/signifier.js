@@ -170,7 +170,7 @@ Signifier = (function() {
 
   Signifier.activate = function() {
     if (logging) console.log('made it to Signifier.activate()!');
-    Signifier.socket = io.connect("http://www.sgnfier.com:7000");
+    Signifier.socket = io.connect("http://127.0.0.1:7000");
     Sign.socket = Signifier.socket;
     return Signifier.socket.on('whereYat', function(data) {
       if (logging) console.log("whereYat recieved!");

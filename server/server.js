@@ -9,7 +9,10 @@ db_name = "signifier";
 db = nano.use(db_name);
 
 io.sockets.on('connection', function(socket) {
-  var Signifier;
+  var Signifier, address;
+  address = socket.handshake.address;
+  console.log("here is the address!: ");
+  console.log(address);
   Signifier = (function() {
 
     function Signifier() {}
@@ -61,6 +64,9 @@ io.sockets.on('connection', function(socket) {
     return Signifier.scoutHood(imAt);
   });
   socket.on("heresASign", function(sign) {
+    sign.creator = {
+      ip: socket.handshake.address.address
+    };
     return db.insert(sign, function(err, body, headers) {
       if (err === false) return console.log(headers, body);
     });

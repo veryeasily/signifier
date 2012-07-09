@@ -5,6 +5,10 @@ db = nano.use db_name
 
 io.sockets.on 'connection', (socket) ->
 
+	address = socket.handshake.address
+	console.log "here is the address!: "
+	console.log address
+
 	class Signifier
 		constructor: ->
 
@@ -39,6 +43,9 @@ io.sockets.on 'connection', (socket) ->
 	socket.on 'chillinAt', (imAt) ->
 		Signifier.scoutHood(imAt)
 	socket.on "heresASign", (sign) ->
+		sign.creator = {
+			ip: socket.handshake.address.address
+		}
 		db.insert sign, (err, body, headers) ->
 			if err is false
 				console.log headers, body
