@@ -1,11 +1,15 @@
 $(
 	() ->
-		Math.rand = (num1, num2) ->
-			if !(num2?)
-				tempstar = Math.floor Math.random() * num1
-				return tempstar
-			diff = Math.abs num2 - num1
-			Math.floor(Math.random() * diff) + num1
+		Math.rand = (num1, num2, floor=true) ->
+			if typeof(num2) isnt "number"
+				floor = num2 if typeof num2 is "boolean"
+				tempnum = Math.random() * num1
+			else
+				diff = Math.abs num2 - num1
+				tempnum = (Math.random() * diff) + num1
+			if floor
+				tempnum = Math.floor tempnum
+			return tempnum
 		getColor = () ->
 				a = (Math.rand 2, 16).toString(16)
 				b = (Math.rand 2, 16).toString(16)

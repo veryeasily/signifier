@@ -1,11 +1,15 @@
 $(
 	() ->
-		Math.rand = (num1, num2) ->
-			if !(num2?)
-				tempstar = Math.floor Math.random() * num1
-				return tempstar
-			diff = Math.abs num2 - num1
-			Math.floor(Math.random() * diff) + num1
+		Math.rand = (num1, num2, floor=true) ->
+			if typeof(num2) isnt "number"
+				floor = num2 if typeof num2 is "boolean"
+				tempnum = Math.random() * num1
+			else
+				diff = Math.abs num2 - num1
+				tempnum = (Math.random() * diff) + num1
+			if floor
+				tempnum = Math.floor tempnum
+			return tempnum
 		getColor = () ->
 				a = (Math.rand 2, 16).toString(16)
 				b = (Math.rand 2, 16).toString(16)
@@ -443,11 +447,12 @@ $(
 			</svg>'
 		makeCrazy = ->
 			# $css.html($css.html() + "\n.rand" + i + " svg {stroke: " + tempy + "; fill: " + tempy + ";}")
-			$("div.crazy").remove()
+			olds = $("div.crazy").animate({ opacity: 0 }, {duration: 250, complete: () -> $(this).remove()})
 			a = Math.floor(Math.random() * 7) + 1
-			console.log temp = Math.rand(3)
+			temp = Math.rand(3)
+			# console.log temp
 			if temp is 2
-				console.log "added even more to a"
+				# console.log "added even more to a"
 				a+= Math.rand(12)
 			for yo in [0...a]
 				r = Math.floor(Math.random() * 24) + 1
@@ -458,7 +463,7 @@ $(
 					position: "absolute"
 					left: (Math.floor(Math.random() * (window.innerWidth - 200)) + 75) + "px"
 					top: (Math.floor(Math.random() * (window.innerHeight - 250)) + 50) + "px"
-					opacity: trans
+					opacity: 0
 				})
 				tmp2 = tempp.children("svg")
 				scale = Math.random() + 0.5
@@ -468,14 +473,16 @@ $(
 				# tmp2.attr("perserveAspectRatio", "xMinYMin meet")
 				# tmp2.attr("viewBox", "0 0 #{arr2[2] * scale} #{arr2[3] * scale}")
 				$(document.body).append(tempp)
-			window.setTimeout(makeCrazy, Math.random() * 500 + 400)
+				tempp.animate({opacity: trans}, {duration: 200})
+			window.setTimeout(makeCrazy, Math.rand 400, 1000)
 
 		buttonGo = ->
-			$(".but1").css({"background-color": "#" + getColor3() + getColor3() + getColor2()})
-			$(".but2").css({"background-color": "#" + getColor3() + getColor5() + getColor3()})
-			$(".but3").css({"background-color": "#" + (temp = getColor5()) + temp + getColor3()})
-			$(".but4").css({"background-color": "#" + getColor2() + getColor3() + getColor3()})
-			window.setTimeout(buttonGo, Math.random() * 50 + 600)
+			$(".but1").animate({backgroundColor: $.Color(saturation: (temp = Math.rand .65, 1, false))}, 100)
+			$(".but2").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+			$(".but3").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+			$(".but4").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+			console.log temp
+			window.setTimeout(buttonGo, Math.rand 500, 1000)
 		makeCrazy()
 		buttonGo()
 )

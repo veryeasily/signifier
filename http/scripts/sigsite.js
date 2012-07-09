@@ -1,14 +1,18 @@
 
 $(function() {
   var buttonGo, getColor, getColor2, getColor3, getColor4, getColor5, makeCrazy, tempy;
-  Math.rand = function(num1, num2) {
-    var diff, tempstar;
-    if (!(num2 != null)) {
-      tempstar = Math.floor(Math.random() * num1);
-      return tempstar;
+  Math.rand = function(num1, num2, floor) {
+    var diff, tempnum;
+    if (floor == null) floor = true;
+    if (typeof num2 !== "number") {
+      if (typeof num2 === "boolean") floor = num2;
+      tempnum = Math.random() * num1;
+    } else {
+      diff = Math.abs(num2 - num1);
+      tempnum = (Math.random() * diff) + num1;
     }
-    diff = Math.abs(num2 - num1);
-    return Math.floor(Math.random() * diff) + num1;
+    if (floor) tempnum = Math.floor(tempnum);
+    return tempnum;
   };
   getColor = function() {
     var a, b;
@@ -408,14 +412,18 @@ $(function() {
 			<path  d="M75.57,26.67c-10.814,0-20.731,10.156-25.741,16.299c-5.01-6.143-14.927-16.299-25.741-16.299  c-12.629,0-22.903,10.274-22.903,22.903s10.274,22.903,22.903,22.903c10.814,0,20.731-10.156,25.741-16.299  c5.009,6.143,14.926,16.299,25.741,16.299c12.629,0,22.903-10.274,22.903-22.903S88.199,26.67,75.57,26.67z M24.088,64.523  c-8.244,0-14.951-6.706-14.951-14.95s6.707-14.951,14.951-14.951c7.68,0,16.509,9.362,20.822,14.951  C40.596,55.164,31.768,64.523,24.088,64.523z M75.57,64.523c-7.683,0-16.514-9.365-20.825-14.954  c4.303-5.59,13.116-14.948,20.825-14.948c8.244,0,14.95,6.707,14.95,14.951S83.814,64.523,75.57,64.523z"/>\
 			</svg>';
   makeCrazy = function() {
-    var a, r, scale, temp, tempp, tmp2, trans, yo;
-    $("div.crazy").remove();
+    var a, olds, r, scale, temp, tempp, tmp2, trans, yo;
+    olds = $("div.crazy").animate({
+      opacity: 0
+    }, {
+      duration: 250,
+      complete: function() {
+        return $(this).remove();
+      }
+    });
     a = Math.floor(Math.random() * 7) + 1;
-    console.log(temp = Math.rand(3));
-    if (temp === 2) {
-      console.log("added even more to a");
-      a += Math.rand(12);
-    }
+    temp = Math.rand(3);
+    if (temp === 2) a += Math.rand(12);
     for (yo = 0; 0 <= a ? yo < a : yo > a; 0 <= a ? yo++ : yo--) {
       r = Math.floor(Math.random() * 24) + 1;
       tempp = $("<div>").html(window["$thing" + r]);
@@ -425,31 +433,45 @@ $(function() {
         position: "absolute",
         left: (Math.floor(Math.random() * (window.innerWidth - 200)) + 75) + "px",
         top: (Math.floor(Math.random() * (window.innerHeight - 250)) + 50) + "px",
-        opacity: trans
+        opacity: 0
       });
       tmp2 = tempp.children("svg");
       scale = Math.random() + 0.5;
       tempy = "#" + getColor() + getColor() + getColor();
       tmp2.css("stroke", tempy).css("fill", tempy);
       $(document.body).append(tempp);
+      tempp.animate({
+        opacity: trans
+      }, {
+        duration: 200
+      });
     }
-    return window.setTimeout(makeCrazy, Math.random() * 500 + 400);
+    return window.setTimeout(makeCrazy, Math.rand(400, 1000));
   };
   buttonGo = function() {
     var temp;
-    $(".but1").css({
-      "background-color": "#" + getColor3() + getColor3() + getColor2()
-    });
-    $(".but2").css({
-      "background-color": "#" + getColor3() + getColor5() + getColor3()
-    });
-    $(".but3").css({
-      "background-color": "#" + (temp = getColor5()) + temp + getColor3()
-    });
-    $(".but4").css({
-      "background-color": "#" + getColor2() + getColor3() + getColor3()
-    });
-    return window.setTimeout(buttonGo, Math.random() * 50 + 600);
+    $(".but1").animate({
+      backgroundColor: $.Color({
+        saturation: (temp = Math.rand(.65, 1, false))
+      })
+    }, 100);
+    $(".but2").animate({
+      backgroundColor: $.Color({
+        saturation: temp
+      })
+    }, 100);
+    $(".but3").animate({
+      backgroundColor: $.Color({
+        saturation: temp
+      })
+    }, 100);
+    $(".but4").animate({
+      backgroundColor: $.Color({
+        saturation: temp
+      })
+    }, 100);
+    console.log(temp);
+    return window.setTimeout(buttonGo, Math.rand(500, 1000));
   };
   makeCrazy();
   return buttonGo();
