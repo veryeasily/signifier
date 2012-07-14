@@ -122,10 +122,10 @@ class Signifier
 		console.log 'made it to Signifier.activate()!' if logging
 
 		# Testing version!
-		Signifier.socket = io.connect "http://127.0.0.1:7000"
+		# Signifier.socket = io.connect "http://127.0.0.1:7000"
 
 		# Legit version
-		# Signifier.socket = io.connect "http://www.sgnfier.com:7000"
+		Signifier.socket = io.connect "http://www.sgnfier.com:7000"
 
 		Sign.socket = Signifier.socket
 		Signifier.socket.on 'whereYat', (data) ->

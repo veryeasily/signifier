@@ -447,7 +447,7 @@ $(
 			</svg>'
 		makeCrazy = ->
 			# $css.html($css.html() + "\n.rand" + i + " svg {stroke: " + tempy + "; fill: " + tempy + ";}")
-			olds = $("div.crazy").animate({ opacity: 0 }, {duration: 250, complete: () -> $(this).remove()})
+			olds = $("div.crazy").animate({ opacity: 0 }, {duration: 100, complete: () -> $(this).remove()})
 			a = Math.floor(Math.random() * 7) + 1
 			temp = Math.rand(3)
 			# console.log temp
@@ -464,6 +464,7 @@ $(
 					left: (Math.floor(Math.random() * (window.innerWidth - 200)) + 75) + "px"
 					top: (Math.floor(Math.random() * (window.innerHeight - 250)) + 50) + "px"
 					opacity: 0
+					'z-index': 3
 				})
 				tmp2 = tempp.children("svg")
 				scale = Math.random() + 0.5
@@ -473,16 +474,19 @@ $(
 				# tmp2.attr("perserveAspectRatio", "xMinYMin meet")
 				# tmp2.attr("viewBox", "0 0 #{arr2[2] * scale} #{arr2[3] * scale}")
 				$(document.body).append(tempp)
-				tempp.animate({opacity: trans}, {duration: 200})
+				tempp.animate({opacity: trans}, {duration: 50})
 			window.setTimeout(makeCrazy, Math.rand 400, 1000)
 
-		buttonGo = ->
-			$(".but1").animate({backgroundColor: $.Color(saturation: (temp = Math.rand .65, 1, false))}, 100)
-			$(".but2").animate({backgroundColor: $.Color(saturation: temp)}, 100)
-			$(".but3").animate({backgroundColor: $.Color(saturation: temp)}, 100)
-			$(".but4").animate({backgroundColor: $.Color(saturation: temp)}, 100)
-			console.log temp
-			window.setTimeout(buttonGo, Math.rand 500, 1000)
+		###
+			buttonGo = ->
+				$(".but1").animate({backgroundColor: $.Color(saturation: (temp = Math.rand .65, 1, false))}, 100)
+				$(".but2").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+				$(".but3").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+				$(".but4").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+				console.log temp
+				window.setTimeout(buttonGo, Math.rand 500, 1000)
+		###
 		makeCrazy()
-		buttonGo()
+		$(".right").css("height", $(".left").css("height"))
+		$(".left").css("height", $(".left").css("height"))
 )

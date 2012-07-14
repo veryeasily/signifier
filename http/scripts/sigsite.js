@@ -1,6 +1,6 @@
 
 $(function() {
-  var buttonGo, getColor, getColor2, getColor3, getColor4, getColor5, makeCrazy, tempy;
+  var getColor, getColor2, getColor3, getColor4, getColor5, makeCrazy, tempy;
   Math.rand = function(num1, num2, floor) {
     var diff, tempnum;
     if (floor == null) floor = true;
@@ -416,7 +416,7 @@ $(function() {
     olds = $("div.crazy").animate({
       opacity: 0
     }, {
-      duration: 250,
+      duration: 100,
       complete: function() {
         return $(this).remove();
       }
@@ -433,7 +433,8 @@ $(function() {
         position: "absolute",
         left: (Math.floor(Math.random() * (window.innerWidth - 200)) + 75) + "px",
         top: (Math.floor(Math.random() * (window.innerHeight - 250)) + 50) + "px",
-        opacity: 0
+        opacity: 0,
+        'z-index': 3
       });
       tmp2 = tempp.children("svg");
       scale = Math.random() + 0.5;
@@ -443,36 +444,21 @@ $(function() {
       tempp.animate({
         opacity: trans
       }, {
-        duration: 200
+        duration: 50
       });
     }
     return window.setTimeout(makeCrazy, Math.rand(400, 1000));
   };
-  buttonGo = function() {
-    var temp;
-    $(".but1").animate({
-      backgroundColor: $.Color({
-        saturation: (temp = Math.rand(.65, 1, false))
-      })
-    }, 100);
-    $(".but2").animate({
-      backgroundColor: $.Color({
-        saturation: temp
-      })
-    }, 100);
-    $(".but3").animate({
-      backgroundColor: $.Color({
-        saturation: temp
-      })
-    }, 100);
-    $(".but4").animate({
-      backgroundColor: $.Color({
-        saturation: temp
-      })
-    }, 100);
-    console.log(temp);
-    return window.setTimeout(buttonGo, Math.rand(500, 1000));
-  };
+  /*
+  			buttonGo = ->
+  				$(".but1").animate({backgroundColor: $.Color(saturation: (temp = Math.rand .65, 1, false))}, 100)
+  				$(".but2").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+  				$(".but3").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+  				$(".but4").animate({backgroundColor: $.Color(saturation: temp)}, 100)
+  				console.log temp
+  				window.setTimeout(buttonGo, Math.rand 500, 1000)
+  */
   makeCrazy();
-  return buttonGo();
+  $(".right").css("height", $(".left").css("height"));
+  return $(".left").css("height", $(".left").css("height"));
 });

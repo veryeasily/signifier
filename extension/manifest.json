@@ -1,6 +1,6 @@
 {
-  "name": "Trace",
-  "version": "0.1020",
+  "name": "Signifier",
+  "version": "0.1021",
   "manifest_version": 2,
   "description": "Trace makes text mean more to more people",
   "browser_action": {
@@ -8,7 +8,7 @@
 	"default_popup": "chrome/popup.html"
   },
   "background": {
-    "scripts": ["chrome/main.js"]
+    "scripts": ["scripts/jquery.min.js", "chrome/main.js"]
   },
   "icons":{
     "128":"images/icon.png"

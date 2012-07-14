@@ -3,6 +3,28 @@ body {
 	background-position: center 1.5%;
 }
 
+.crazy {
+	z-index: 3;
+}
+
+.info {
+	position: relative;
+	margin: 200px;
+	background-color: #b6b;
+	-webkit-border-radius: 5px;
+	z-index: 10;
+	opacity: 0.85;
+	overflow: hidden;
+}
+
+.lowerright {
+	float: right;
+	width: 47%;
+	margin: 1%;
+	background-color: #b03933;
+	border: 0.5%;
+}
+
 div.main-nav {
 	position: absolute;
 	left: 3%;
