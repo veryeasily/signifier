@@ -10,20 +10,29 @@ body {
 .info {
 	position: relative;
 	margin: 200px;
-	background-color: #b6b;
+	background-color: #eee;
 	-webkit-border-radius: 5px;
 	z-index: 10;
 	opacity: 0.85;
 	overflow: hidden;
 }
-
+/*
 .lowerright {
 	float: right;
-	width: 47%;
-	margin: 1%;
+	width: 48%;
 	background-color: #b03933;
-	border: 0.5%;
+	padding: 0.5%;
 }
+*/
+
+/*
+.lowerleft {
+	float: left;
+	clear: both;
+	background-color: #921;
+	width: 49%;
+}
+*/
 
 div.main-nav {
 	position: absolute;
@@ -34,6 +43,10 @@ div.main-nav {
 	background-color: #444444;
 	opacity: 0.8;
 	z-index: 10;
+}
+
+.inner {
+	padding: 0%;
 }
 
 .menB {
