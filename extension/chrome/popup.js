@@ -1,10 +1,10 @@
 
 $(function() {
-  var makeIt, removeIt;
-  $("#signer").addClass("sigButton").addClass("addButton");
-  $("#signer2").addClass("sigButton").addClass("delButton");
-  $("#text1").addClass("sigButton").addClass("addButton").addClass("inside");
-  $("#text2").addClass("sigButton").addClass("delButton").addClass("inside");
+  var go, makeIt, removeIt;
+  go = function() {
+    return $(document.body).height(48);
+  };
+  setTimeout(go, 20);
   makeIt = function(e) {
     return chrome.extension.sendRequest({
       greeting: "makeSign"
@@ -20,5 +20,6 @@ $(function() {
     });
   };
   $("#signer").on("click", makeIt);
-  return $("#signer2").on("click", removeIt);
+  $("#signer2").on("click", removeIt);
+  return $("#signer3").on("click", function() {});
 });

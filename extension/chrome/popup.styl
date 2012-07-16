@@ -1,17 +1,20 @@
 
-@import 'mixins'
 
 wdth = 40px
 hght = 32px
 spaceBetween = 2.75px
-lMarg = 3.25px
+lMarg = 3px
 hMarg = 2px
 borderWidth = 1px
 
-html 
-	background-color: white
-	height: unit(((2 * hMarg) + hght + (2 * borderWidth)), px)
-	width: unit(((2 * (lMarg + wdth)) + spaceBetween + (4 * borderWidth)), px)
+body 
+	background-color: paleGoldenrod
+	margin: 1px
+
+.outer
+	width: 118px
+	overflow: hidden
+	background-color: powderBlue
 
 .sigButton 
 	font-size: small
@@ -19,56 +22,38 @@ html
 	text-align: center
 	line-height: 0.8
 	letter-spacing: -0.07em
-
-	position: absolute
-	height: hght
-	width: wdth
-
+	padding: 3px
+	display: inline
 
 .addButton 
 	tpos = hMarg
 	bpos = hMarg + hght
 	lpos = lMarg
 
-	left: lMarg
-	top: hMarg
-	z-index: 1
+	margin: lMarg 0 lMarg lMarg
 
 	background-color: #EE9A9A
 	color: #50120C
 	border: solid #650000 borderWidth
 	-webkit-border-radius: 3px
 
-	.inside
-		background-color: transparent
-		border: hidden transparent 0px
-		position: absolute
-
-		height: auto
-		width: wdth
-		left: 0px
-		top: unit((hght / 2) - 11.5, px)
-		z-index: 2
+.inside
+	background-color: transparent
+	border: hidden transparent 0px
 
 .delButton 
 
-	left: unit((spaceBetween + wdth + (2 * borderWidth) + lMarg), px)
-	top: hMarg
-	z-index: 1
+	margin: lMarg 0 lMarg lMarg
 
 	background-color: #9A9AEE
 	color: #0A2643
 	border: solid #002740 borderWidth
 	-webkit-border-radius: 3px
 
-	.inside
-		background-color: transparent
-		border: hidden transparent 0px
-		position: absolute
+.moreButton 
+	margin: lMarg
 
-		height: auto
-		width: wdth
-		left: 0px
-		top: unit((hght / 2) - 11.5, px)
-		z-index: 2
-
+	background-color: gold
+	color: #0A2643
+	border: solid #002740 borderWidth
+	-webkit-border-radius: 3px
