@@ -53,8 +53,6 @@ io.sockets.on('connection', function(socket) {
       });
     };
 
-    Signifier.deleteAllDocs();
-
     return Signifier;
 
   })();

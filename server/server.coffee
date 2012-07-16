@@ -37,8 +37,6 @@ io.sockets.on 'connection', (socket) ->
 				console.log "database purged successfully!"
 			)
 
-		Signifier.deleteAllDocs()
-
 
 	socket.emit('whereYat', {header: null})
 	console.log 'whereYat just sent'
