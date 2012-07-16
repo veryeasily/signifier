@@ -19,8 +19,6 @@ class Signifier
 
 	@alreadySent: false
 
-	@addedSigns: []
-
 	@deleteEntireDatabase: =>
 		@socket.emit 'deleteTheWholeShebang'
 
@@ -121,9 +119,8 @@ class Signifier
 					.data('sigId', link._id)
 					.data('sigRev', link._rev)
 				$(this).addClass("siggg")
-				@addedSigns.push wrapper
 				if Signifier.alreadySent isnt true
-					chrome.extension.sendMessage(signStatus: (Signifier.signsFound = true), (response) ->
+					chrome.extension.sendMessage( signStatus: (Signifier.signsFound = true), (response) ->
 						Signifier.alreadySent = true
 						console.log response if logging
 					)
