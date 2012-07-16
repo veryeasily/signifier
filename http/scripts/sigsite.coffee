@@ -448,12 +448,12 @@ $(
 		makeCrazy = ->
 			# $css.html($css.html() + "\n.rand" + i + " svg {stroke: " + tempy + "; fill: " + tempy + ";}")
 			olds = $("div.crazy").animate({ opacity: 0 }, {duration: 100, complete: () -> $(this).remove()})
-			a = Math.floor(Math.random() * 7) + 1
+			a = Math.rand(1, 25)
 			temp = Math.rand(3)
 			# console.log temp
-			if temp is 2
+			# if temp is 2
 				# console.log "added even more to a"
-				a+= Math.rand(12)
+				# a+= Math.rand(200)
 			for yo in [0...a]
 				r = Math.floor(Math.random() * 24) + 1
 				tempp = $("<div>").html(window["$thing" + r])
@@ -487,6 +487,4 @@ $(
 				window.setTimeout(buttonGo, Math.rand 500, 1000)
 		###
 		makeCrazy()
-		$(".right").css("height", $(".left").css("height"))
-		$(".left").css("height", $(".left").css("height"))
 )

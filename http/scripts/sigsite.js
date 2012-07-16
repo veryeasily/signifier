@@ -421,9 +421,8 @@ $(function() {
         return $(this).remove();
       }
     });
-    a = Math.floor(Math.random() * 7) + 1;
+    a = Math.rand(1, 25);
     temp = Math.rand(3);
-    if (temp === 2) a += Math.rand(12);
     for (yo = 0; 0 <= a ? yo < a : yo > a; 0 <= a ? yo++ : yo--) {
       r = Math.floor(Math.random() * 24) + 1;
       tempp = $("<div>").html(window["$thing" + r]);
@@ -458,7 +457,5 @@ $(function() {
   				console.log temp
   				window.setTimeout(buttonGo, Math.rand 500, 1000)
   */
-  makeCrazy();
-  $(".right").css("height", $(".left").css("height"));
-  return $(".left").css("height", $(".left").css("height"));
+  return makeCrazy();
 });

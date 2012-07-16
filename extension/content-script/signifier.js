@@ -27,7 +27,7 @@ Signifier = (function() {
           return [child, child.data.indexOf(str)];
         } else if (child.nodeType === 1) {
           if (logging) console.log("dove a level deeper with findTextNode");
-          this.findTextNode(str, child);
+          return this.findTextNode(str, child);
         }
       }
     }
@@ -47,8 +47,6 @@ Signifier = (function() {
       Signifier.queWorkingLinks(links);
       observer = new WebKitMutationObserver(function(mutations) {
         var mutation, node, possibleElts, testNodeForSiggg, _i, _j, _k, _len, _len2, _len3, _ref, _results;
-        if (logging) console.log(mutations);
-        window.mutations = mutations;
         possibleElts = [];
         testNodeForSiggg = function(node) {
           var ref;
@@ -62,6 +60,8 @@ Signifier = (function() {
           if (node.nodeType = 3) node = node.parentElement && (ref = $(node));
           return ref.hasClass("siggg");
         };
+        if (logging) console.log(mutations);
+        window.mutations = mutations;
         for (_i = 0, _len = mutations.length; _i < _len; _i++) {
           mutation = mutations[_i];
           if (mutation.addedNodes.length) {
@@ -119,9 +119,9 @@ Signifier = (function() {
       }
       actual.each(function(ind) {
         var endInfo, range, startInfo, wrapper;
+        range = document.createRange();
         startInfo = Signifier.findTextNode(link.startText || link.text, this);
         endInfo = Signifier.findTextNode(link.endText || link.text, this);
-        range = document.createRange();
         if (logging) {
           console.log("here is our link info");
           console.log(startInfo);
@@ -140,7 +140,7 @@ Signifier = (function() {
             signStatus: (Signifier.signsFound = true)
           }, function(response) {
             Signifier.alreadySent = true;
-            return console.log(response);
+            if (logging) return console.log(response);
           });
         }
       });
