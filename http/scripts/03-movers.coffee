@@ -1,7 +1,7 @@
 		makeCrazy = ->
 			# $css.html($css.html() + "\n.rand" + i + " svg {stroke: " + tempy + "; fill: " + tempy + ";}")
 			olds = $("div.crazy").animate({ opacity: 0 }, {duration: 100, complete: () -> $(this).remove()})
-			a = Math.rand(1, 25)
+			a = Math.rand(1, 12)
 			temp = Math.rand(3)
 			# console.log temp
 			# if temp is 2
@@ -11,7 +11,7 @@
 				r = Math.floor(Math.random() * 24) + 1
 				tempp = $("<div>").html(window["$thing" + r])
 				tempp.addClass("crazy")
-				trans = Math.random() * .4 + .15
+				trans = Math.random() * .50 + .50
 				tempp.css({
 					position: "absolute"
 					left: (Math.floor(Math.random() * (window.innerWidth - 200)) + 75) + "px"
@@ -28,7 +28,7 @@
 				# tmp2.attr("viewBox", "0 0 #{arr2[2] * scale} #{arr2[3] * scale}")
 				$(document.body).append(tempp)
 				tempp.animate({opacity: trans}, {duration: 50})
-			window.setTimeout(makeCrazy, Math.rand 400, 1000)
+			window.setTimeout(makeCrazy, Math.rand 450, 1050)
 
 		###
 			buttonGo = ->

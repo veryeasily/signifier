@@ -7,9 +7,19 @@ chrome.browserAction.onClicked.addListener (tab) ->
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
   if (request.greeting) {
     if (request.greeting === "makeSign") {
-      return chrome.tabs.getSelected(null, function(tab) {
+      chrome.tabs.getSelected(null, function(tab) {
         return chrome.tabs.sendRequest(tab.id, {
           greeting: "makeSign"
+        }, function(response) {
+          return console.log(response);
+        });
+      });
+    }
+    if (request.greeting === "gogglesSign") {
+      console.log("made it to gogglesSign!");
+      return chrome.tabs.getSelected(null, function(tab) {
+        return chrome.tabs.sendRequest(tab.id, {
+          greeting: "gogglesSign"
         }, function(response) {
           return console.log(response);
         });

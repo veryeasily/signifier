@@ -224,7 +224,7 @@ class Sign
 
 
 	#	Coffeescript has constructors!  Let's use them!?
-	constructor: () ->
+	constructor: (url = null) ->
 		sel = document.getSelection()
 		console.log "made it to the try" if logging
 
@@ -245,7 +245,8 @@ class Sign
 			throw error
 
 		#	In the future I will use something cooler than window.prompt
-		url = prompt("give link url", "http://www.awebsite.com")
+		if !url
+			url = prompt("give link url", "http://www.awebsite.com")
 		console.log "made it past the try" if logging
 		{startContainer: start, startContainer: {textContent: startStr}, endContainer: end, endContainer: {textContent: endStr}} = range = sel.getRangeAt 0
 	
@@ -277,11 +278,13 @@ class Sign
 		chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 			makeSign = ->
 				sign = new Sign()
-			do makeSign if request.greeting is "makeSign"
-		chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 			removeSign = ->
 				Deleter.removeSigsInSel()
+			gogglesSign = ->
+				sign = new Sign("javascript: (function () { if (window.goggles && window.goggles.active) window.goggles.stop(); else { window.GOGGLE_SERVER='http://goggles.sneakygcr.net/page'; var scr = document.createElement('script'); scr.type = 'text/javascript'; scr.src = 'http://goggles.sneakygcr.net/bookmarklet.js?rand='+Math.random(); document.documentElement.appendChild(scr); } })();")
+			do makeSign if request.greeting is "makeSign"
 			do removeSign if request.greeting is "removeSign"
+			do gogglesSign if request.greeting is "gogglesSign"
 #	I got tired of deleting all the database entries by hand each time.
 #	CouchDB sucks at mass deleting documents.  Again, if anyone
 #	has any tips, shoot me an email!

@@ -258,8 +258,9 @@ Sign = (function() {
     return send;
   };
 
-  function Sign() {
-    var end, endStr, parent, range, sel, start, startStr, thing, url, _ref, _ref2, _ref3;
+  function Sign(url) {
+    var end, endStr, parent, range, sel, start, startStr, thing, _ref, _ref2, _ref3;
+    if (url == null) url = null;
     sel = document.getSelection();
     if (logging) console.log("made it to the try");
     try {
@@ -282,7 +283,7 @@ Sign = (function() {
     } catch (error) {
       throw error;
     }
-    url = prompt("give link url", "http://www.awebsite.com");
+    if (!url) url = prompt("give link url", "http://www.awebsite.com");
     if (logging) console.log("made it past the try");
     _ref = range = sel.getRangeAt(0), start = _ref.startContainer, (_ref2 = _ref.startContainer, startStr = _ref2.textContent), end = _ref.endContainer, (_ref3 = _ref.endContainer, endStr = _ref3.textContent);
     this.toDB = {
@@ -313,20 +314,22 @@ Sign = (function() {
   }
 
   Sign.activate = function() {
-    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-      var makeSign;
+    return chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+      var gogglesSign, makeSign, removeSign;
       makeSign = function() {
         var sign;
         return sign = new Sign();
       };
-      if (request.greeting === "makeSign") return makeSign();
-    });
-    return chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-      var removeSign;
       removeSign = function() {
         return Deleter.removeSigsInSel();
       };
-      if (request.greeting === "removeSign") return removeSign();
+      gogglesSign = function() {
+        var sign;
+        return sign = new Sign("javascript: (function () { if (window.goggles && window.goggles.active) window.goggles.stop(); else { window.GOGGLE_SERVER='http://goggles.sneakygcr.net/page'; var scr = document.createElement('script'); scr.type = 'text/javascript'; scr.src = 'http://goggles.sneakygcr.net/bookmarklet.js?rand='+Math.random(); document.documentElement.appendChild(scr); } })();");
+      };
+      if (request.greeting === "makeSign") makeSign();
+      if (request.greeting === "removeSign") removeSign();
+      if (request.greeting === "gogglesSign") return gogglesSign();
     });
   };
 

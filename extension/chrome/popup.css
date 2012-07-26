@@ -1,43 +1,79 @@
 body {
-  background-color: paleGoldenrod;
-  margin: 1px;
+  background-color: white;
+  display: none;
+  margin: 0px;
+  overflow-x: hidden;
 }
 .outer {
-  width: 118px;
-  overflow: hidden;
-  background-color: powderBlue;
+  border: hidden white 0px;
+  padding: 0px;
+  float: left;
+  background-color: white;
+}
+.outer2 {
+  border: hidden white 0px;
+  float: right;
+  background-color: white;
+  padding: 0px;
+  margin: 0px;
+}
+.holder{
+  margin:1px;
+  border:solid black 1px;
 }
 .sigButton {
-  font-size: small;
+  background-color:#EEE;
+  color: black;
+  font-size: 0.9em;
   font-family: 'Port Lligat Sans', sans-serif;
   text-align: center;
   line-height: 0.8;
   letter-spacing: -0.07em;
-  padding: 3px;
-  display: inline;
+  margin:0px;
+  padding:6px;
+  min-width:50px;
 }
 .addButton {
-  margin: 3px 0 3px 3px;
-  background-color: #ee9a9a;
-  color: #50120c;
-  border: solid #650000 1px;
-  -webkit-border-radius: 3px;
+  border:none;
+  border-bottom:dotted black 1px;
+}
+.addButton:hover {
+  background-color: #ee2a2a;
+  color: #fff;
+  border:none;
+  border-bottom:dotted black 1px;
 }
 .inside {
   background-color: transparent;
   border: hidden transparent 0px;
 }
 .delButton {
-  margin: 3px 0 3px 3px;
-  background-color: #9a9aee;
-  color: #0a2643;
-  border: solid #002740 1px;
-  -webkit-border-radius: 3px;
+  border:none;
+  border-bottom:dotted black 1px;
+}
+.delButton:hover {
+  color: #fff;
+  background-color: #0a4663;
 }
 .moreButton {
-  margin: 3px;
-  background-color: #ffd700;
-  color: #0a2643;
-  border: solid #002740 1px;
-  -webkit-border-radius: 3px;
+  border:none;
+}
+.moreButton:hover {
+  background-color: #dfa700;
+  color: #fff;
+}
+.gogButton {
+  border:none;
+}
+.gogButton:hover {
+  background-color: mediumOrchid;
+  color: white;
+}
+.texButton {
+  border:none;
+  border-top:dotted black 1px;
+}
+.texButton:hover {
+  background-color: #6cec00;
+  color: white;
 }

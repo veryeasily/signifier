@@ -421,13 +421,13 @@ $(function() {
         return $(this).remove();
       }
     });
-    a = Math.rand(1, 25);
+    a = Math.rand(1, 12);
     temp = Math.rand(3);
     for (yo = 0; 0 <= a ? yo < a : yo > a; 0 <= a ? yo++ : yo--) {
       r = Math.floor(Math.random() * 24) + 1;
       tempp = $("<div>").html(window["$thing" + r]);
       tempp.addClass("crazy");
-      trans = Math.random() * .4 + .15;
+      trans = Math.random() * .50 + .50;
       tempp.css({
         position: "absolute",
         left: (Math.floor(Math.random() * (window.innerWidth - 200)) + 75) + "px",
@@ -446,7 +446,7 @@ $(function() {
         duration: 50
       });
     }
-    return window.setTimeout(makeCrazy, Math.rand(400, 1000));
+    return window.setTimeout(makeCrazy, Math.rand(450, 1050));
   };
   /*
   			buttonGo = ->

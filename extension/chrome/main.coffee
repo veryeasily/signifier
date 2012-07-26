@@ -10,6 +10,11 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 			chrome.tabs.getSelected null, (tab) ->
 				chrome.tabs.sendRequest tab.id, {greeting: "makeSign"}, (response) ->
 					console.log response
+		if request.greeting is "gogglesSign"
+			console.log "made it to gogglesSign!"
+			chrome.tabs.getSelected null, (tab) ->
+				chrome.tabs.sendRequest tab.id, {greeting: "gogglesSign"}, (response) ->
+					console.log response
 		else if request.greeting is "removeSign"
 			chrome.tabs.getSelected null, (tab) ->
 				chrome.tabs.sendRequest tab.id, {greeting: "removeSign"}, (response) ->
