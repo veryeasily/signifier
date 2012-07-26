@@ -1,0 +1,7 @@
+<project default="concatenate">
+	<target name="concatenate">
+		<concat destfile="sigsite.coffee">
+			<fileset dir="." includes="*.coffee" />
+		</concat>
+	</target>
+</project>
