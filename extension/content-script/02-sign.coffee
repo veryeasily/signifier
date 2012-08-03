@@ -122,6 +122,11 @@ class Sign
 		Sign.socket.emit("heresASign", @toDB)
 
 	@activate: ->
+		console.log "made it to Sign.activate()"
+		chrome.extension.sendMessage {greeting: "activated"}, (response) ->
+			console.log "sent activated message to background script!"
+			if response.farewell is "runWalkthrough"
+				Walkthrough.activate()
 		chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 			makeSign = ->
 				sign = new Sign()

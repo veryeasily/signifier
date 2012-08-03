@@ -29,6 +29,8 @@ body {
   text-align: center;
   line-height: 0.8;
   letter-spacing: -0.07em;
+  -webkit-user-select:none;
+  cursor:default;
   margin:0px;
   padding:6px;
   min-width:50px;

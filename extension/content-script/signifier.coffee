@@ -275,6 +275,11 @@ class Sign
 		Sign.socket.emit("heresASign", @toDB)
 
 	@activate: ->
+		console.log "made it to Sign.activate()"
+		chrome.extension.sendMessage {greeting: "activated"}, (response) ->
+			console.log "sent activated message to background script!"
+			if response.farewell is "runWalkthrough"
+				Walkthrough.activate()
 		chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 			makeSign = ->
 				sign = new Sign()
@@ -305,14 +310,23 @@ class Deleter
 				if logging
 					console.log "sig attempted to be deleted"
 					console.log a
-$ ->
-	chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
-		console.log response if logging
-	)
-	Signifier.activate()
-	Sign.activate()
-	if logging
-		return console.log "Signifier activated"
+# chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
+#	if request.greeting is "walkthrough"
+class Walkthrough
+	@activate: () ->
+		dialog = $("<div id='sigDialog'>").attr("title", "Welcome to Signifier!").appendTo(document.body)
+		$("<p>").html(
+			"""
+			To begin,
+			<ol>
+			<li>Highlight any text on this page.</li>
+			<li>Click the sig button in the upper right hand corner of your browser.</li>
+			<li>Click the make sign button</li>
+			<li>Copy and paste your url into the dialog box.</li>
+			</ol>
+			"""
+		).appendTo(dialog)
+		dialog.dialog()
 class SignifierHelpers
 
 	SignifierHelpers.getTextNodes = (elt) ->
@@ -341,3 +355,11 @@ class SignifierHelpers
 		child = arr[0]
 		child = child.nextSibling while !child.contains?(node)
 		return child
+$ ->
+	chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
+		console.log response if logging
+	)
+	Signifier.activate()
+	Sign.activate()
+	if logging
+		return console.log "Signifier activated"

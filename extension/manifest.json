@@ -15,8 +15,8 @@
   },
   "content_scripts": [ {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["scripts/socket.io.js", "scripts/underscore.js", "scripts/jquery.min.js", "content-script/signifier.js"],
-	  "css": ["css/mainstyle.css"]
+      "js": ["scripts/socket.io.js", "scripts/underscore.js", "scripts/jquery-1.7.2.min.js", "scripts/jquery-ui-1.8.22.custom.min.js", "content-script/signifier.js"],
+	  "css": ["css/mainstyle.css", "css/ui-lightness/jquery-ui-1.8.22.custom.css"]
   }  ],
   "permissions": [
   	"tabs", "http://127.0.0.1:7000/*", "https://127.0.0.1:7000/*"

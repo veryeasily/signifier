@@ -4,13 +4,15 @@ chrome.browserAction.onClicked.addListener (tab) ->
 	  (response) ->
 		  console.log response
 ###
+
 chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
+	console.log request
 	if request.greeting
 		if request.greeting is "makeSign"
 			chrome.tabs.getSelected null, (tab) ->
 				chrome.tabs.sendRequest tab.id, {greeting: "makeSign"}, (response) ->
 					console.log response
-		if request.greeting is "gogglesSign"
+		else if request.greeting is "gogglesSign"
 			console.log "made it to gogglesSign!"
 			chrome.tabs.getSelected null, (tab) ->
 				chrome.tabs.sendRequest tab.id, {greeting: "gogglesSign"}, (response) ->
@@ -25,6 +27,11 @@ chrome.extension.onMessage.addListener((request, sender, sendResponse) ->
 	console.log if sender.tab then "from content script:" + sender.tab.url else "from the extension"
 	console.log "here's the tab info:"
 	console.log sender
+	if request.greeting is "activated"
+		console.log "greeting was 'activated'"
+		if !localStorage.walkedThrough
+			sendResponse {farewell: "runWalkthrough"}
+			localStorage.walkedThrough = true
 	if request.signStatus?
 		if request.signStatus is true
 			chrome.browserAction.setIcon
