@@ -6,6 +6,7 @@ fs.readFile('./http/sig.html', function (err, html) {
         throw err; 
     }       
     http.createServer(function(request, response) {  
+		console.log(request);
         response.writeHeader(200, {"Content-Type": "text/html"});  
         response.write(html);  
         response.end();  
