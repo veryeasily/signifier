@@ -2,6 +2,8 @@ var express = require('express');
 
 var app = express.createServer();
 
+var fs = require('fs');
+
 app.configure('development', function() {
 	app.use(express.logger());
 	app.use(express.errorHandler({
@@ -28,8 +30,11 @@ app.use(express.static(__dirname + '/public'));
 
 // app.register('.html', require('jade'));
 
-app.get('/', function(req, res){
-	res.sendfile(__dirname + '/public/sig.html')
+fs.readFile('./public/sig.html', function (err, html) {
+	app.get('/', function(req, res){
+		res.sendfile(__dirname + html)
+	});
 });
 
-app.listen(4000);
+
+app.listen(80, 'www.sgnfier.com');
