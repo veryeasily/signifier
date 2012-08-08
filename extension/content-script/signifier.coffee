@@ -145,7 +145,7 @@ class Signifier
 		# Signifier.socket = io.connect "http://127.0.0.1:7000"
 
 		# Legit version
-		Signifier.socket = io.connect "http://www.sgnfier.com:7000"
+		Signifier.socket = io.connect("http://127.0.0.1:7000")
 
 		Sign.socket = Signifier.socket
 		Signifier.socket.on 'whereYat', (data) ->
@@ -247,6 +247,8 @@ class Sign
 		#	In the future I will use something cooler than window.prompt
 		if !url
 			url = prompt("give link url", "http://www.awebsite.com")
+		if !url?
+			return
 		console.log "made it past the try" if logging
 		{startContainer: start, startContainer: {textContent: startStr}, endContainer: end, endContainer: {textContent: endStr}} = range = sel.getRangeAt 0
 	

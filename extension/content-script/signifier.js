@@ -193,7 +193,7 @@ Signifier = (function() {
     if (logging) {
       console.log('made it to Signifier.activate()!');
     }
-    Signifier.socket = io.connect("http://www.sgnfier.com:7000");
+    Signifier.socket = io.connect("http://127.0.0.1:7000");
     Sign.socket = Signifier.socket;
     return Signifier.socket.on('whereYat', function(data) {
       if (logging) {
@@ -322,6 +322,9 @@ Sign = (function() {
     }
     if (!url) {
       url = prompt("give link url", "http://www.awebsite.com");
+    }
+    if (!(url != null)) {
+      return;
     }
     if (logging) {
       console.log("made it past the try");

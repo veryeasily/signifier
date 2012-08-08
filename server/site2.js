@@ -29,12 +29,11 @@ app.use(express.static(__dirname + '/public'));
 */
 
 // app.register('.html', require('jade'));
+console.log(__dirname);
 
-fs.readFile('./public/sig.html', function (err, html) {
-	app.get('/', function(req, res){
-		res.sendfile(__dirname + html)
-	});
+app.get('/', function(req, res){
+	res.sendfile(__dirname + '/sig.html')
 });
 
 
-app.listen(80, 'www.sgnfier.com');
+app.listen(9000);

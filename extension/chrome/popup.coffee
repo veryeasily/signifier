@@ -2,16 +2,25 @@
 trigger = false
 $ ->
 	$(document.body).show(300)
+	(firstButton = $("#signer")).addClass("sigSelect")
+	allButtons = $(".sigButton")
+	$(".sigButton").on("mouseover", () ->
+		allButtons.removeClass("sigSelect")
+		$(this).addClass("sigSelect")
+	)
 
 	makeIt = (e) ->
+		$(this).addClass("sigSelect")
 		chrome.extension.sendRequest {greeting: "makeSign"}, (res) ->
 			console.log res
 
 	removeIt = (e) ->
+		$(this).addClass("sigSelect")
 		chrome.extension.sendRequest {greeting: "removeSign"}, (res) ->
 			console.log res
 
 	gogglesIt = (e) ->
+		$(this).addClass("sigSelect")
 		console.log "made it to gogglesIt!"
 		chrome.extension.sendRequest {greeting: "gogglesSign"}, (res) ->
 			console.log res

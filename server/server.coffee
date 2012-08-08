@@ -1,4 +1,4 @@
-io = require('socket.io').listen(7000, 'sgnfier.com')
+io = require('socket.io').listen(7000)
 nano = require('nano')('http://127.0.0.1:5984')
 db_name = "signifier"
 db = nano.use db_name

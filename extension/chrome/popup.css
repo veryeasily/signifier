@@ -30,52 +30,38 @@ body {
   line-height: 0.8;
   letter-spacing: -0.07em;
   -webkit-user-select:none;
-  cursor:default;
+  cursor: pointer;
   margin:0px;
   padding:6px;
   min-width:50px;
 }
 .addButton {
-  border:none;
   border-bottom:dotted black 1px;
 }
 .addButton:hover {
-  background-color: #ee2a2a;
-  color: #fff;
-  border:none;
-  border-bottom:dotted black 1px;
+}
+.sigSelect {
+  padding: 10px;
 }
 .inside {
   background-color: transparent;
   border: hidden transparent 0px;
 }
 .delButton {
-  border:none;
   border-bottom:dotted black 1px;
 }
 .delButton:hover {
-  color: #fff;
-  background-color: #0a4663;
 }
 .moreButton {
-  border:none;
 }
 .moreButton:hover {
-  background-color: #dfa700;
-  color: #fff;
 }
 .gogButton {
-  border:none;
 }
 .gogButton:hover {
-  background-color: mediumOrchid;
-  color: white;
 }
 .texButton {
-  border:none;
   border-top:dotted black 1px;
 }
 .texButton:hover {
-  background-color: #6cec00;
-  color: white;
 }
