@@ -28,7 +28,7 @@
 				# tmp2.attr("viewBox", "0 0 #{arr2[2] * scale} #{arr2[3] * scale}")
 				$(document.body).append(tempp)
 				tempp.animate({opacity: trans}, {duration: 50})
-			window.setTimeout(makeCrazy, Math.rand 400, 1000)
+			window.setTimeout(makeCrazy, Math.rand 200, 800)
 
 		###
 			buttonGo = ->

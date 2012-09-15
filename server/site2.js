@@ -32,7 +32,7 @@ app.use(express.static(__dirname + '/public'));
 console.log(__dirname);
 
 app.get('/', function(req, res){
-	res.sendfile(__dirname + '/sig.html')
+	res.sendfile(__dirname + '/public/sig.html')
 });
 
 
