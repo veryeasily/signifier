@@ -60,4 +60,4 @@ or maybe
 </td>
 </tr>
 </table>
-Signifier is under some kind of open source license, but don't copy my code until I decide what that license is.
+Signifier is currently copyrighted, but don't copy my code until I decide what that license is.
