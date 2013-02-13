@@ -60,3 +60,4 @@ or maybe
 </td>
 </tr>
 </table>
+Signifier is under some kind of license so don't use it or steal it until I decide what that license is.
