@@ -1,0 +1,77 @@
+body {
+	background: #343434 url('background15.png') no-repeat fixed;
+	background-position: center 1.5%;
+}
+
+.crazy {
+	z-index: 3;
+}
+
+.info {
+	position: relative;
+	margin: 200px;
+	background-color: #eee;
+	-webkit-border-radius: 5px;
+	z-index: 10;
+	opacity: 0.85;
+	overflow: hidden;
+}
+/*
+.lowerright {
+	float: right;
+	width: 48%;
+	background-color: #b03933;
+	padding: 0.5%;
+}
+*/
+
+/*
+.lowerleft {
+	float: left;
+	clear: both;
+	background-color: #921;
+	width: 49%;
+}
+*/
+
+div.main-nav {
+	position: absolute;
+	left: 3%;
+	bottom: 0%;
+	width: 94%;
+	height: 4%;
+	background-color: #444444;
+	opacity: 0.8;
+	z-index: 10;
+}
+
+.inner {
+	padding: 0%;
+}
+
+.menB {
+	height: 67%;
+	width: 1.6%;
+	position: absolute;
+	top: 16.5%;
+}
+
+div.but1 {
+	background-color: blue;
+	right: 35.5%;
+}
+
+div.but2 {
+	background-color: green;
+	right: 32.2%;
+}
+
+div.but3 {
+	background-color: yellow;
+	right: 28.9%;
+}
+
+div.but4 {
+	background-color: red;
+	right: 25.6%;
+}
