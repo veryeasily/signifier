@@ -1,4 +1,3 @@
-
 <table border="0" cellpadding="0" cellspacing="0" frame="void" width="100%">
 <colgroup>
 <col class="one" border="0">
@@ -15,47 +14,47 @@ or maybe
 </p>
 </th>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 <tr>
 <td>
-<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" width="84px" height="64px" align="right">
+<img src="https://github.com/elju/signifier/raw/master/extension/images/icon.png" height="64px" align="right">
 </td>
 </tr>
 </table>
