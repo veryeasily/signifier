@@ -1,0 +1,10 @@
+{
+  "_id": "_design/signifier",
+  "_rev": "1-376fed99ae072ee7e8af7f3748bfac0e",
+  "language": "javascript",
+  "views": {
+     "neighborhood": {
+        "map": "function(doc) {\n  emit([doc.host, doc.path], doc);\n}"
+     }
+  }
+}

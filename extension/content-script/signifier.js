@@ -3,7 +3,7 @@ var Deleter, LOGGING, SOCKET_ADDRESS, Sign, Signifier, SignifierHelpers, Walkthr
 
 LOGGING = true;
 
-SOCKET_ADDRESS = "http://127.0.0.1:7000";
+SOCKET_ADDRESS = "http://larry.chatlands.com:7000";
 
 Signifier = (function() {
   function Signifier() {}

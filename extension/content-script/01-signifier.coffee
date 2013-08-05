@@ -1,9 +1,9 @@
 LOGGING = true
 # DEVELOPMENT SERVER
-SOCKET_ADDRESS = "http://127.0.0.1:7000"
+# SOCKET_ADDRESS = "http://127.0.0.1:7000"
 
 # PRODUCTION SERVER
-# SOCKET_ADDRESS = "http://larry.chatlands.com:7000"
+SOCKET_ADDRESS = "http://larry.chatlands.com:7000"
 
 #   ToDo: Direct connections with facebook and twitter
 #     to lower database load.

@@ -1,9 +1,9 @@
 LOGGING = true
 # DEVELOPMENT SERVER
-SOCKET_ADDRESS = "http://127.0.0.1:7000"
+# SOCKET_ADDRESS = "http://127.0.0.1:7000"
 
 # PRODUCTION SERVER
-# SOCKET_ADDRESS = "http://larry.chatlands.com:7000"
+SOCKET_ADDRESS = "http://larry.chatlands.com:7000"
 
 #   ToDo: Direct connections with facebook and twitter
 #     to lower database load.
@@ -272,11 +272,12 @@ class Sign
     thing = document.createElement('a')
     thing.href = url
     thing.target = '_blank'
-    range.surroundContents(thing)
-    $(thing).addClass("signifier").addClass("siggg")
+    range.surroundContents thing
+    $(thing).addClass("signifier")
+        .addClass("siggg")
     $(parent).addClass("siggg")
 
-    Sign.socket.emit("heresASign", @toDB)
+    Sign.socket.emit "heresASign", @toDB
 
   @activate: ->
     console.log "made it to Sign.activate()"
