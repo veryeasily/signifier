@@ -1,8 +1,8 @@
 $ ->
-	chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
-		console.log response if logging
-	)
-	Signifier.activate()
-	Sign.activate()
-	if logging
-		return console.log "Signifier activated"
+  chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
+    console.log response if LOGGING
+  )
+  Signifier.activate()
+  Sign.activate()
+  if LOGGING
+    return console.log "Signifier activated"
