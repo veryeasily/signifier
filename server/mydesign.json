@@ -1,5 +1,5 @@
 {
-  "_id": "_design/signifier",
+  "_id": "_design/app",
   "_rev": "1-376fed99ae072ee7e8af7f3748bfac0e",
   "language": "javascript",
   "views": {

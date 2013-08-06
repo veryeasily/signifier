@@ -1,6 +1,6 @@
 {
   "name": "Signifier",
-  "version": "0.1021",
+  "version": "1.0",
   "manifest_version": 2,
   "description": "Signifier helps text mean more",
   "browser_action": {
