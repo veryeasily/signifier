@@ -11,7 +11,7 @@
 <a href="http://www.iep.utm.edu/derrida/#SH3b">http://www.iep.utm.edu/derrida/#SH3b</a>
 or maybe 
 <a href="http://en.wikipedia.org/wiki/Indra%27s_Net#Huayan_school">http://en.wikipedia.org/wiki/Indra%27s_Net#Huayan_school</a>. <br>
-Use it, for instance, to fact check news articles through linking the article itself to studies challenging its claims.
+Use it, for instance, to fact check news articles by linking the article itself to studies challenging its claims.
 </p>
 </th>
 <td>
