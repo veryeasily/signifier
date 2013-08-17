@@ -8,151 +8,145 @@ SOCKET_ADDRESS = "http://larry.chatlands.com:7000"
 #   ToDo: Direct connections with facebook and twitter
 #     to lower database load.
 
-class Signifier
-  @loc: window.location
+# We do custom logging.
+log = (logs...) ->
+  console.log item for item in logs if LOGGING
 
-  @signsFound: false
+Signifier =
+  signsFound: false
+  alreadySent: false
 
-  @alreadySent: false
+  findLink: (link, elt = document.body) ->
+    text = link.margin
+    return null unless ($elt = $(elt)).filter(":contains(#{text})").length
+    $child = $elt
+    checkChildren = -> $child.children(":contains(#{text})")
+    ($child = checkChildren()).length and $elt = $child while $child.length
+    return $elt[0]
 
-  @deleteEntireDatabase: =>
-    @socket.emit 'deleteTheWholeShebang'
+  findTextNode: (str, node) ->
+    for child in node.childNodes when (
+      (text = child.textContent) and
+      typeof text.indexOf is "function" and
+      text.indexOf(str) > -1)
+        while child.nodeType isnt 3
+          log "dove a level deeper with findTextNode"
+          return @findTextNode str, child
+        log child
+        return {node: child, index: child.data.indexOf(str)}
 
-  @findTextNode: (str, node) ->
-    for child in node.childNodes when (child.textContent || "").indexOf(str) > -1
-      if child.nodeType is 3
-        if LOGGING then console.log child
-        return [child, child.data.indexOf(str)]
-      else if child.nodeType is 1
-        console.log "dove a level deeper with findTextNode" if LOGGING
-        return @findTextNode str, child
-
-  @getNeighborhood: ->
+  getNeighborhood: ->
     @socket.emit 'chillinAt',
-      host: @loc.hostname,
-      path: @loc.pathname
-    @socket.on 'heresYourHood', (links) ->
-      if LOGGING
-        console.log "response from heresYourHood!"
-        console.log links
-      Signifier.queWorkingLinks links
+      host: window.location.hostname,
+      path: window.location.pathname
+    @socket.on 'heresYourHood', (response) =>
+      log "response from heresYourHood!", response
 
+      @response = response
+      @links = links =
+        if Array.isArray @response.rows
+          row.value for row in response.rows
+        else null
+      for link in links
+        if elt = @findLink(link)
+          log elt
+          @makeLink(link, elt)
+          @removeLink(link)
 
-    #  This uses the WebKitMutationObserver object to figure out when
-    #  dynamic content is added to the page. MutationObservers are
-    #  incredibly general objects, so we have to do a lot of parsing
-    #  through the data.
-    observer = new WebKitMutationObserver (mutations) ->
-      possibleElts = []
+      #  This uses the WebKitMutationObserver object to figure out when
+      #  dynamic content is added to the page. MutationObservers are
+      #  incredibly general objects, so we have to do a lot of parsing
+      #  through the data.
 
-      #  Sometimes the "when" part of loop comprehensions can
-      #  get a little crazy, so the code gets moved to its
-      #  own function.
-      testNodeForSiggg = (node) ->
-        if !(ref = $ node)
-          if LOGGING
-            console.log "somehow found a node which gives an undefined
-              jQuery object!  here's the node: "
-            console.log node
-          return true
+      sig_id = 0
+      targets = []
+      observer = new WebKitMutationObserver (mutations) =>
+        links = @links
+        
+        # We log added nodes. We don't use this now but probably will
+        # in the future
+        #
+        # may want to eventually check removed nodes also
+        mutations =
+          mutation for mutation in mutations when(
+            length = mutation.addedNodes.length)
 
-        # If it's a text node, we're done! Back to the parent.
-        if node.nodeType = 3
-          node = node.parentElement and ref = $ node
-        return ref.hasClass("siggg")
+        new_ones = false
 
-        console.log mutations if LOGGING
-        window.mutations = mutations
+        for mutation in mutations when(
+          (target = mutation.target) and
+          targets.indexOf(target) is -1)
+          target.dataset['sigid'] ?= sig_id++
+          targets.push target
+          new_ones = true
+        if mutations.length and new_ones
+          for link in links
+            if elt = @findLink(link)
+              log elt
+              @makeLink(link, elt)
+              @removeLink(link)
+        log "here's the targets they were added to", targets if targets.length
 
-        # Function which checks if node is already a signifier. We require
-        # the node to be a html element, so we climb up from text nodes
-        # if necessary.
-        for mutation in mutations when mutation.addedNodes.length
-          for node in mutation.addedNodes when testNodeForSiggg(node) isnt true
-            if node.nodeType is 1 then possibleElts.push node
-            else if node.nodeType is 3 then possibleElts.push node.parentElement
-
-        if LOGGING
-          console.log "Here are the possibleElts of our mutations: "
-          console.log possibleElts
-        for node in possibleElts when node.textContent isnt ""
-          Signifier.queWorkingLinks(links, node)
-
-      observer.observe(document.body, {childList: true, subtree: true})
+      observer.observe document.body,
+        childList: true
+        subtree: true
             
-  # Given a parent element, iterates over a list of links from couchDB
-  # looking for matching margin text. Once margin text is found, fill
-  # in the link if we need to add one.
-  @queWorkingLinks: (links, parent = document.body) ->
+  removeLink: (link) ->
+    links = @links
+    i = links.indexOf(link)
+    @links = links.slice(0, i)
+      .concat links.slice(i + 1, length)
+    return @links
 
-    Signifier.fillInSign = (link, parent = document.body) ->
-      if LOGGING
-        console.log "this is the link ->"
-        console.log link
-      possibles = ($ parent).find "#{link.tag}:contains(#{link.margin})"
-      actual = possibles.filter (ind) ->
-        (Signifier.elementIsSmallest @, possibles) and ($(this).hasClass "siggg") isnt true
-      if LOGGING
-        console.log "this is the possibles"
-        console.log possibles
-        console.log "this is the actuals: "
-        console.log actual
-      actual.each (ind) ->
-        range = document.createRange()
-        startInfo = Signifier.findTextNode(link.startText || link.text, this)
-        endInfo = Signifier.findTextNode(link.endText || link.text, this)
-        if LOGGING
-          console.log "here is our link info"
-          console.log startInfo
-          console.log endInfo
-        range.setStart(
-          startInfo[0],
-          startInfo[1]
-        )
-        range.setEnd(
-          endInfo[0],
-          endInfo[1] + (link.endText || link.text).length
-        )
-        #  Now we create our link wrapper to place around with jQuery
-        wrapper = document.createElement 'a'
-        wrapper.href = link.url
-        wrapper.target = '_blank'
-        range.surroundContents wrapper
-        $(wrapper).addClass('signifier')
-          .addClass('siggg')
-          .data('sigId', link._id)
-          .data('sigRev', link._rev)
-        $(this).addClass("siggg")
-        if Signifier.alreadySent isnt true
-          chrome.extension.sendMessage signStatus: (Signifier.signsFound = true),
-            (response) ->
-              Signifier.alreadySent = true
-              console.log response if LOGGING
-      return actual
+  makeLink: (link, elt) ->
+      range = document.createRange()
+      startInfo = @findTextNode(link.startText || link.text, elt)
+      endInfo = @findTextNode(link.endText || link.text, elt)
+      log "here is our link info", startInfo, endInfo
 
-    if Array.isArray links.rows
-      for a in links.rows when (
-        (parent.textContent.indexOf a.value.margin) isnt -1)
-        link = a.value
-        Signifier.fillInSign link, parent
+      range.setStart(
+        startInfo.node,
+        startInfo.index
+      )
+      range.setEnd(
+        endInfo.node,
+        endInfo.index + (link.endText || link.text).length
+      )
 
-  @elementIsSmallest: (elt, arr) ->
-    for temp in arr when temp isnt elt
-      if elt.contains(temp)
-        return false
-    return true
+      #  Now we create our link wrapper to place around with jQuery
+      wrapper = document.createElement 'a'
+      wrapper.href = link.url
+      wrapper.target = '_blank'
+      range.surroundContents wrapper
+      $(wrapper).addClass('signifier')
+        .data('sigId', link._id)
+        .data('sigRev', link._rev)
+      $(this).addClass("signifier")
 
+      found = true
+      if Signifier.alreadySent isnt true
+        chrome.extension.sendMessage signStatus: (Signifier.signsFound = true),
+          (response) ->
+            Signifier.alreadySent = true
+            log response
+      return found
 
-  @activate: ->
-    console.log 'made it to Signifier.activate()!' if LOGGING
+  activate: ->
+    log 'made it to Signifier.activate()!'
+
+    window.body = document.body # just for shorthand
 
     # Legit version
     Signifier.socket = io.connect SOCKET_ADDRESS
 
     Sign.socket = Signifier.socket
     Signifier.socket.on 'whereYat', (data) ->
-      console.log "whereYat recieved!" if LOGGING
+      log "whereYat recieved!"
       Signifier.getNeighborhood()
+
+  deleteEntireDatabase: =>
+    @socket.emit 'deleteTheWholeShebang'
+
 #  A sign is what we add to the database whenever somebody makes a new link.
 #  It contains a copy of the links URL, the host and path where the selected
 #  text was located, information about the text that was selected, and a margin
@@ -181,7 +175,7 @@ class Sign
 
   @getOffsetToNode: (parent, elt) =>
     if parent is elt
-      console.log "returning without reducing" if LOGGING
+      log "returning without reducing"
       return 0
     else
       goddamn = (a for a in parent.childNodes)
@@ -190,45 +184,43 @@ class Sign
       #  ^^ This is the only time I use underscore.js in the extension?
       if elt.parentNode isnt parent
         offset+= @getOffsetToNode(@findContainingChild(parent, elt), elt)
-      console.log "offset being returned from @getOffsetToNode is: #{offset}" if LOGGING
+      log "offset being returned from @getOffsetToNode is: #{offset}"
       return offset
 
   @getMargin: (range) =>
-    if LOGGING
-      console.log "range is ="
-      console.log range
+    log "range is =", range
 
     #  Calculates the offset through ALL child nodes of the CAC to range.startContainer (a text node)
     startOffset = @getOffsetToNode(range.commonAncestorContainer, range.startContainer) + range.startOffset
-    console.log "startOffset = #{startOffset}" if LOGGING
+    log "startOffset = #{startOffset}"
 
 
     #  Same deal here but with range.endContainer
     endOffset = @getOffsetToNode(range.commonAncestorContainer, range.endContainer) + range.endOffset
-    console.log "endOffset = #{endOffset}" if LOGGING
+    log "endOffset = #{endOffset}"
 
 
     #  Grab 10 letters to the left and right of the selection unless we're out of room
     left = Math.max(0, startOffset - 10)
     right = Math.min(range.commonAncestorContainer.textContent.length, endOffset + 10)
-    if LOGGING
-      console.log "here is the index of our margin"
-      console.log [left, right]
-      console.log "here is range.commonAncestorContainer.textContent"
-      console.log range.commonAncestorContainer.textContent
-      console.log "here is our margin!"
+    log "here is the index of our margin",
+      [left, right],
+      "here is range.commonAncestorContainer.textContent",
+      range.commonAncestorContainer.textContent,
+      "here is our margin!",
+      multiline: true
 
     #  Little trick here where I assign the variable within console.log
     #  Coffeescript returns the last line of every function, so we send 'send' back
     #  to the caller
-    console.log (send = range.commonAncestorContainer.textContent.slice(left, right)) if LOGGING
+    log (send = range.commonAncestorContainer.textContent.slice(left, right))
     send
 
 
   #  Coffeescript has constructors!  Let's use them!?
   constructor: (url = null) ->
     sel = document.getSelection()
-    console.log "made it to the try" if LOGGING
+    log "made it to the try"
 
     #  Make sure the Range isn't crazy
     try
@@ -251,7 +243,7 @@ class Sign
       url = prompt("give link url", "http://www.awebsite.com")
     if !url?
       return
-    console.log "made it past the try" if LOGGING
+    log "made it past the try"
     {startContainer: start, startContainer: {textContent: startStr}, endContainer: end, endContainer: {textContent: endStr}} = range = sel.getRangeAt 0
   
     @toDB =
@@ -265,24 +257,23 @@ class Sign
       path: document.location.pathname
 
     if range.startContainer isnt range.endContainer
-      console.log "trying to slice each container"
+      log "trying to slice each container"
       @toDB.startText = startStr.slice range.startOffset, startStr.length + 1
       @toDB.endText = endStr.slice 0, range.endOffset
-    console.log "#{@toDB.startText} is startText, #{@toDB.endText} is endText" if LOGGING
+    log "#{@toDB.startText} is startText, #{@toDB.endText} is endText"
     thing = document.createElement('a')
     thing.href = url
     thing.target = '_blank'
     range.surroundContents thing
     $(thing).addClass("signifier")
-        .addClass("siggg")
-    $(parent).addClass("siggg")
+    $(parent).addClass("signifier")
 
     Sign.socket.emit "heresASign", @toDB
 
   @activate: ->
-    console.log "made it to Sign.activate()"
+    log "made it to Sign.activate()"
     chrome.extension.sendMessage {greeting: "activated"}, (response) ->
-      console.log "sent activated message to background script!"
+      log "sent activated message to background script!"
       if response.farewell is "runWalkthrough"
         Walkthrough.activate()
     chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
@@ -312,9 +303,7 @@ class Deleter
         b = a.childNodes[0]
         $(b).unwrap()
         Signifier.socket.emit 'delete', {id: id, rev: rev}
-        if LOGGING
-          console.log "sig attempted to be deleted"
-          console.log a
+        log "sig attempted to be deleted", a
 # chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 #  if request.greeting is "walkthrough"
 class Walkthrough
@@ -362,9 +351,8 @@ class SignifierHelpers
     return child
 $ ->
   chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
-    console.log response if LOGGING
+    log response
   )
   Signifier.activate()
   Sign.activate()
-  if LOGGING
-    return console.log "Signifier activated"
+  return log "Signifier activated"

@@ -15,6 +15,4 @@ class Deleter
         b = a.childNodes[0]
         $(b).unwrap()
         Signifier.socket.emit 'delete', {id: id, rev: rev}
-        if LOGGING
-          console.log "sig attempted to be deleted"
-          console.log a
+        log "sig attempted to be deleted", a

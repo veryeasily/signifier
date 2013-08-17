@@ -26,7 +26,7 @@ class Sign
 
   @getOffsetToNode: (parent, elt) =>
     if parent is elt
-      console.log "returning without reducing" if LOGGING
+      log "returning without reducing"
       return 0
     else
       goddamn = (a for a in parent.childNodes)
@@ -35,45 +35,43 @@ class Sign
       #  ^^ This is the only time I use underscore.js in the extension?
       if elt.parentNode isnt parent
         offset+= @getOffsetToNode(@findContainingChild(parent, elt), elt)
-      console.log "offset being returned from @getOffsetToNode is: #{offset}" if LOGGING
+      log "offset being returned from @getOffsetToNode is: #{offset}"
       return offset
 
   @getMargin: (range) =>
-    if LOGGING
-      console.log "range is ="
-      console.log range
+    log "range is =", range
 
     #  Calculates the offset through ALL child nodes of the CAC to range.startContainer (a text node)
     startOffset = @getOffsetToNode(range.commonAncestorContainer, range.startContainer) + range.startOffset
-    console.log "startOffset = #{startOffset}" if LOGGING
+    log "startOffset = #{startOffset}"
 
 
     #  Same deal here but with range.endContainer
     endOffset = @getOffsetToNode(range.commonAncestorContainer, range.endContainer) + range.endOffset
-    console.log "endOffset = #{endOffset}" if LOGGING
+    log "endOffset = #{endOffset}"
 
 
     #  Grab 10 letters to the left and right of the selection unless we're out of room
     left = Math.max(0, startOffset - 10)
     right = Math.min(range.commonAncestorContainer.textContent.length, endOffset + 10)
-    if LOGGING
-      console.log "here is the index of our margin"
-      console.log [left, right]
-      console.log "here is range.commonAncestorContainer.textContent"
-      console.log range.commonAncestorContainer.textContent
-      console.log "here is our margin!"
+    log "here is the index of our margin",
+      [left, right],
+      "here is range.commonAncestorContainer.textContent",
+      range.commonAncestorContainer.textContent,
+      "here is our margin!",
+      multiline: true
 
     #  Little trick here where I assign the variable within console.log
     #  Coffeescript returns the last line of every function, so we send 'send' back
     #  to the caller
-    console.log (send = range.commonAncestorContainer.textContent.slice(left, right)) if LOGGING
+    log (send = range.commonAncestorContainer.textContent.slice(left, right))
     send
 
 
   #  Coffeescript has constructors!  Let's use them!?
   constructor: (url = null) ->
     sel = document.getSelection()
-    console.log "made it to the try" if LOGGING
+    log "made it to the try"
 
     #  Make sure the Range isn't crazy
     try
@@ -96,7 +94,7 @@ class Sign
       url = prompt("give link url", "http://www.awebsite.com")
     if !url?
       return
-    console.log "made it past the try" if LOGGING
+    log "made it past the try"
     {startContainer: start, startContainer: {textContent: startStr}, endContainer: end, endContainer: {textContent: endStr}} = range = sel.getRangeAt 0
   
     @toDB =
@@ -110,24 +108,23 @@ class Sign
       path: document.location.pathname
 
     if range.startContainer isnt range.endContainer
-      console.log "trying to slice each container"
+      log "trying to slice each container"
       @toDB.startText = startStr.slice range.startOffset, startStr.length + 1
       @toDB.endText = endStr.slice 0, range.endOffset
-    console.log "#{@toDB.startText} is startText, #{@toDB.endText} is endText" if LOGGING
+    log "#{@toDB.startText} is startText, #{@toDB.endText} is endText"
     thing = document.createElement('a')
     thing.href = url
     thing.target = '_blank'
     range.surroundContents thing
     $(thing).addClass("signifier")
-        .addClass("siggg")
-    $(parent).addClass("siggg")
+    $(parent).addClass("signifier")
 
     Sign.socket.emit "heresASign", @toDB
 
   @activate: ->
-    console.log "made it to Sign.activate()"
+    log "made it to Sign.activate()"
     chrome.extension.sendMessage {greeting: "activated"}, (response) ->
-      console.log "sent activated message to background script!"
+      log "sent activated message to background script!"
       if response.farewell is "runWalkthrough"
         Walkthrough.activate()
     chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
