@@ -8,7 +8,7 @@ class Deleter
     sel = document.getSelection()
     range = sel.getRangeAt 0
     parent = range.commonAncestorContainer
-    for a in $(parent).find("a.siggg")
+    for a in $(parent).find("a.sig")
       if sel.containsNode(a)
         id = $(a).data('sigId')
         rev = $(a).data('sigRev')

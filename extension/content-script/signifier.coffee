@@ -13,8 +13,24 @@ log = (logs...) ->
   console.log item for item in logs if LOGGING
 
 Signifier =
-  signsFound: false
-  alreadySent: false
+  signs_found: false
+
+  activate: ->
+    log "made it to Signifier.activate()!"
+
+    window.body = document.body # just for shorthand
+
+    # Legit version
+    @socket = socket = io.connect SOCKET_ADDRESS
+
+    Sign.socket = socket
+    socket.on "whereYat", (data) =>
+      log "whereYat recieved!"
+      @getNeighborhood()
+
+  deleteEntireDatabase: ->
+    @activate() if !@socket.emit
+    @socket.emit "deleteTheWholeShebang"
 
   findLink: (link, elt = document.body) ->
     text = link.margin
@@ -28,125 +44,106 @@ Signifier =
     for child in node.childNodes when (
       (text = child.textContent) and
       typeof text.indexOf is "function" and
-      text.indexOf(str) > -1)
+      text.indexOf(str) >= 0)
         while child.nodeType isnt 3
-          log "dove a level deeper with findTextNode"
+          log "Went a level deeper with findTextNode"
           return @findTextNode str, child
         log child
         return {node: child, index: child.data.indexOf(str)}
 
   getNeighborhood: ->
-    @socket.emit 'chillinAt',
-      host: window.location.hostname,
+    @socket.emit "chillinAt",
+      host: window.location.hostname
       path: window.location.pathname
-    @socket.on 'heresYourHood', (response) =>
+    @socket.on "heresYourHood", (response) =>
       log "response from heresYourHood!", response
+      @unpackResponse response
+    
+  handleMutations: (mutations) ->
+    # We log added nodes. We don't use this now but probably will
+    # in the future
+    #
+    # may want to eventually check removed nodes also
+    mutations =
+      mutation for mutation in mutations when(
+        length = mutation.addedNodes.length)
 
-      @response = response
-      @links = links =
-        if Array.isArray @response.rows
-          row.value for row in response.rows
-        else null
-      for link in links
-        if elt = @findLink(link)
-          log elt
-          @makeLink(link, elt)
-          @removeLink(link)
+    new_ones = false
 
-      #  This uses the WebKitMutationObserver object to figure out when
-      #  dynamic content is added to the page. MutationObservers are
-      #  incredibly general objects, so we have to do a lot of parsing
-      #  through the data.
+    # We keep track of the new elements that were added
+    # for mutation in mutations when(
+    #   (target = mutation.target) and
+    #   targets.indexOf(target) is -1)
+    #   target.dataset["sigid"] ?= sig_id++
+    #   targets.push target
+    #   new_ones = true
+    # log "here's the targets they were added to", targets if targets.length
 
-      sig_id = 0
-      targets = []
-      observer = new WebKitMutationObserver (mutations) =>
-        links = @links
-        
-        # We log added nodes. We don't use this now but probably will
-        # in the future
-        #
-        # may want to eventually check removed nodes also
-        mutations =
-          mutation for mutation in mutations when(
-            length = mutation.addedNodes.length)
+    if mutations.length and new_ones
+      @processLink link for link in links
 
-        new_ones = false
+  makeLink: (link, elt) ->
+      range = document.createRange()
+      start_info = @findTextNode(link.startText || link.text, elt)
+      end_info = @findTextNode(link.endText || link.text, elt)
+      log "here is our link info", start_info, end_info
 
-        for mutation in mutations when(
-          (target = mutation.target) and
-          targets.indexOf(target) is -1)
-          target.dataset['sigid'] ?= sig_id++
-          targets.push target
-          new_ones = true
-        if mutations.length and new_ones
-          for link in links
-            if elt = @findLink(link)
-              log elt
-              @makeLink(link, elt)
-              @removeLink(link)
-        log "here's the targets they were added to", targets if targets.length
+      range.setStart start_info.node,
+        start_info.index
+      range.setEnd end_info.node,
+        end_info.index + (link.endText || link.text).length
 
-      observer.observe document.body,
-        childList: true
-        subtree: true
-            
-  removeLink: (link) ->
+      #  Now we create our link wrapper to place around with jQuery
+      wrapper = document.createElement "a"
+      wrapper.href = link.url
+      wrapper.target = "_blank"
+      range.surroundContents wrapper
+      $(wrapper, wrapper.parentElement).addClass("signifier")
+        .filter(wrapper)
+        .data("sigId", link._id)
+        .data("sigRev", link._rev)
+
+      if @signs_found isnt true
+        chrome.extension.sendMessage signStatus: true,
+          (response) =>
+            log response
+            @signs_found = true
+      return link
+
+  processLink: (link) ->
+    if elt = @findLink link
+      log elt
+      @makeLink link, elt
+      @updateLinks link
+
+  updateLinks: (link) ->
     links = @links
-    i = links.indexOf(link)
+    i = links.indexOf link
+
     @links = links.slice(0, i)
       .concat links.slice(i + 1, length)
     return @links
 
-  makeLink: (link, elt) ->
-      range = document.createRange()
-      startInfo = @findTextNode(link.startText || link.text, elt)
-      endInfo = @findTextNode(link.endText || link.text, elt)
-      log "here is our link info", startInfo, endInfo
+  unpackResponse: (response) ->
+    @response = response
+    @links = links =
+      if Array.isArray (@response || {}).rows
+        row.value for row in response.rows
+      else null
+    # And now we get out of here unless we have a non null response.
+    return unless response
 
-      range.setStart(
-        startInfo.node,
-        startInfo.index
-      )
-      range.setEnd(
-        endInfo.node,
-        endInfo.index + (link.endText || link.text).length
-      )
+    @processLink link for link in links
+    #  This uses the WebKitMutationObserver object to figure out when
+    #  dynamic content is added to the page. MutationObservers are
+    #  incredibly general objects, so we have to do a lot of parsing
+    #  through the data.
 
-      #  Now we create our link wrapper to place around with jQuery
-      wrapper = document.createElement 'a'
-      wrapper.href = link.url
-      wrapper.target = '_blank'
-      range.surroundContents wrapper
-      $(wrapper).addClass('signifier')
-        .data('sigId', link._id)
-        .data('sigRev', link._rev)
-      $(this).addClass("signifier")
+    sig_id = 0
+    targets = []
+    observer = new WebKitMutationObserver @handleMutations
 
-      found = true
-      if Signifier.alreadySent isnt true
-        chrome.extension.sendMessage signStatus: (Signifier.signsFound = true),
-          (response) ->
-            Signifier.alreadySent = true
-            log response
-      return found
-
-  activate: ->
-    log 'made it to Signifier.activate()!'
-
-    window.body = document.body # just for shorthand
-
-    # Legit version
-    Signifier.socket = io.connect SOCKET_ADDRESS
-
-    Sign.socket = Signifier.socket
-    Signifier.socket.on 'whereYat', (data) ->
-      log "whereYat recieved!"
-      Signifier.getNeighborhood()
-
-  deleteEntireDatabase: =>
-    @socket.emit 'deleteTheWholeShebang'
-
+    observer.observe document.body, childList: true, subtree: true
 #  A sign is what we add to the database whenever somebody makes a new link.
 #  It contains a copy of the links URL, the host and path where the selected
 #  text was located, information about the text that was selected, and a margin
@@ -296,7 +293,7 @@ class Deleter
     sel = document.getSelection()
     range = sel.getRangeAt 0
     parent = range.commonAncestorContainer
-    for a in $(parent).find("a.siggg")
+    for a in $(parent).find("a.sig")
       if sel.containsNode(a)
         id = $(a).data('sigId')
         rev = $(a).data('sigRev')
@@ -350,9 +347,9 @@ class SignifierHelpers
     child = child.nextSibling while !child.contains?(node)
     return child
 $ ->
-  chrome.extension.sendMessage({signStatus: Signifier.signsFound}, (response) ->
-    log response
-  )
   Signifier.activate()
   Sign.activate()
   return log "Signifier activated"
+  # chrome.extension.sendMessage(signStatus: Signifier.signsFound, (response) ->
+  #   log response
+  # )
